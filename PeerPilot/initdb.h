@@ -21,7 +21,7 @@ const auto STUDENTS_SQL = QString(R"(
 )");
 
 const auto GROUPS_SQL = QString(R"(
-    create table students(
+    create table groups(
         class_id integer,
         student_id integer,
         group_name varchar
@@ -45,6 +45,11 @@ QSqlError initDb() {
     if (tables.contains("students", Qt::CaseInsensitive))
         if (!q.exec(STUDENTS_SQL))
             return q.lastError();
+
+    if (tables.contains("groups", Qt::CaseInsensitive))
+        if (!q.exec(GROUPS_SQL))
+            return q.lastError();
+
     // TODO: Add Test Data
 
     return QSqlError();
