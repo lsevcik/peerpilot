@@ -1,3 +1,4 @@
+#include "mainwindow/mainwindow.h"
 #include "mainwindow.h"
 #include "initdb.h"
 
