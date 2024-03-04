@@ -29,6 +29,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_SOURCES}
         createclass/createclass.h createclass/createclass.cpp createclass/createclass.ui
         viewclasses/viewclasses.h viewclasses/viewclasses.cpp viewclasses/viewclasses.ui
+        viewquizresults/viewquizresults.h viewquizresults/viewquizresults.cpp viewquizresults/viewquizresults.ui
 
 
     )
