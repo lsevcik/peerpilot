@@ -1,9 +1,8 @@
 #include "mainwindow/mainwindow.h"
-#include "mainwindow.h"
 #include "initdb.h"
 
 #include <QApplication>
-#include <QtSql/qsqldatabase.h>
+#include <QtSql>
 
 int main(int argc, char *argv[])
 {

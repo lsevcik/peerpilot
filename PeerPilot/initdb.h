@@ -6,7 +6,7 @@ const auto CLASSES_SQL = QString(R"(
         id integer primary key,
         title varchar not null,
         canvas_id integer,
-        sis_id
+        sis_id integer
     )
     )");
 

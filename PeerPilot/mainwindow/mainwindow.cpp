@@ -6,17 +6,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
-    DB_Connection = QSqlDatabase::addDatabase("QSQLITE");
-    //specifiy name of DB
-    DB_Connection.setDatabaseName(QCoreApplication::applicationDirPath() + "/Database/peerpilotdata.db");
-    if(DB_Connection.open()){
-        qDebug() << "Database is connected";
-    }
-    else{
-        qDebug() << "Database is not connected";
-        qDebug() << "Error: " << DB_Connection.lastError();
-    }
 }
 
 MainWindow::~MainWindow()
@@ -27,38 +16,30 @@ MainWindow::~MainWindow()
 //Button that insert data to DB
 void MainWindow::on_pushButton_InsertData_clicked()
 {
-    //Open connection to DB
-    DB_Connection.open();
     //Prevent simultaneous access to DB
     QSqlDatabase::database().transaction();
     //create a sqlquery instance that will let us query the DB with CRUD statements
-    QSqlQuery QueryInsertData(DB_Connection);
+    QSqlQuery q;
 
-    //Here we write the query
-    QueryInsertData.prepare("INSERT INTO StudentReviews(Student_ID, Review) VALUES(:val1, :val2)");
+    q.prepare("INSERT INTO classes(sisid, title) VALUES(:id, :title)");
 
     //for the values we are adding to DB, give their name then origin
     //                              name        ,        origin
-    QueryInsertData.bindValue(":val1", ui->lineEdit->text().toInt());
-    QueryInsertData.bindValue(":val2", ui->lineEdit_2->text());
+    q.bindValue(":id", ui->lineEdit->text().toInt());
+    q.bindValue(":title", ui->lineEdit_2->text());
 
-    //execute query
-    QueryInsertData.exec();
-    //commit request to DB
+    if (!q.exec())
+        qDebug() << q.lastError();
     QSqlDatabase::database().commit();
-    //close connection
-    DB_Connection.close();
 }
 
 
 void MainWindow::on_pushButton_InsertData_2_clicked()
 {
-    //Open connection to DB
-    DB_Connection.open();
     //Prevent simultaneous access to DB
     QSqlDatabase::database().transaction();
     //create a sqlquery instance that will let us query the DB with CRUD statements
-    QSqlQuery QueryLoadData(DB_Connection);
+    QSqlQuery QueryLoadData;
 
     //Here we write the query
     QueryLoadData.prepare("SELECT * FROM StudentReviews");
@@ -75,7 +56,5 @@ void MainWindow::on_pushButton_InsertData_2_clicked()
 
     //commit request to DB
     QSqlDatabase::database().commit();
-    //close connection
-    DB_Connection.close();
 }
 

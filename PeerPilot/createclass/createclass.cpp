@@ -1,45 +1,9 @@
 #include "createclass.h"
 
-createclass::createclass(QObject *parent)
-    : QAbstractItemModel(parent)
-{}
-
-QVariant createclass::headerData(int section, Qt::Orientation orientation, int role) const
+createclass::createclass(QWidget * parent)
 {
-    // FIXME: Implement me!
 }
 
-QModelIndex createclass::index(int row, int column, const QModelIndex &parent) const
+createclass::~createclass()
 {
-    // FIXME: Implement me!
-}
-
-QModelIndex createclass::parent(const QModelIndex &index) const
-{
-    // FIXME: Implement me!
-}
-
-int createclass::rowCount(const QModelIndex &parent) const
-{
-    if (!parent.isValid())
-        return 0;
-
-    // FIXME: Implement me!
-}
-
-int createclass::columnCount(const QModelIndex &parent) const
-{
-    if (!parent.isValid())
-        return 0;
-
-    // FIXME: Implement me!
-}
-
-QVariant createclass::data(const QModelIndex &index, int role) const
-{
-    if (!index.isValid())
-        return QVariant();
-
-    // FIXME: Implement me!
-    return QVariant();
 }
