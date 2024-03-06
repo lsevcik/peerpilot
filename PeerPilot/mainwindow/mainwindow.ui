@@ -14,52 +14,61 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLabel" name="label_Title">
     <property name="geometry">
      <rect>
-      <x>180</x>
-      <y>10</y>
-      <width>113</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lineEdit_2">
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>40</y>
-      <width>301</width>
-      <height>201</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_InsertData">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>250</y>
-      <width>381</width>
-      <height>41</height>
+      <x>30</x>
+      <y>220</y>
+      <width>261</width>
+      <height>91</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <pointsize>31</pointsize>
       <bold>true</bold>
      </font>
     </property>
     <property name="text">
-     <string>Insert Data</string>
+     <string>PEER PILOT</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="label_ChooseClass">
     <property name="geometry">
      <rect>
-      <x>60</x>
+      <x>430</x>
       <y>10</y>
-      <width>41</width>
-      <height>16</height>
+      <width>191</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>19</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Choose a Class</string>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="listWidget_showClasses">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>50</y>
+      <width>301</width>
+      <height>431</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_AddNewClass">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>500</y>
+      <width>121</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="font">
@@ -69,84 +78,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Name</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>40</y>
-      <width>51</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>Review</string>
-    </property>
-   </widget>
-   <widget class="QTableWidget" name="tableWidget">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>360</y>
-      <width>351</width>
-      <height>192</height>
-     </rect>
-    </property>
-    <column>
-     <property name="text">
-      <string>Student_ID</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Review</string>
-     </property>
-    </column>
-   </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>430</y>
-      <width>51</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>Table</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_InsertData_2">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>310</y>
-      <width>381</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>Show Data</string>
+     <string>Add new Class</string>
     </property>
    </widget>
   </widget>

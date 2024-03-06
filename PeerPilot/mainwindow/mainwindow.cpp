@@ -13,48 +13,35 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-//Button that insert data to DB
-void MainWindow::on_pushButton_InsertData_clicked()
-{
-    //Prevent simultaneous access to DB
-    QSqlDatabase::database().transaction();
-    //create a sqlquery instance that will let us query the DB with CRUD statements
-    QSqlQuery q;
-
-    q.prepare("INSERT INTO classes(sisid, title) VALUES(:id, :title)");
-
-    //for the values we are adding to DB, give their name then origin
-    //                              name        ,        origin
-    q.bindValue(":id", ui->lineEdit->text().toInt());
-    q.bindValue(":title", ui->lineEdit_2->text());
-
-    if (!q.exec())
-        qDebug() << q.lastError();
-    QSqlDatabase::database().commit();
+void MainWindow::getDBconnection(){
+    db = QSqlDatabase::database("QSQLITE");
+    qDebug() << db.drivers();
+    if(db.isOpen())
+        fillTable();
+    else
+        qDebug() << db.lastError();
 }
 
-
-void MainWindow::on_pushButton_InsertData_2_clicked()
-{
+void MainWindow::fillTable(){
+    //Open connection to DB
+    db.open();
     //Prevent simultaneous access to DB
-    QSqlDatabase::database().transaction();
+    db.database().transaction();
     //create a sqlquery instance that will let us query the DB with CRUD statements
-    QSqlQuery QueryLoadData;
+    QSqlQuery q(db);
 
     //Here we write the query
-    QueryLoadData.prepare("SELECT * FROM StudentReviews");
-    int number_of_rows = 10;
-    if(QueryLoadData.exec()){
-        ui->tableWidget->setRowCount(number_of_rows);
-        int row_number = 0;
-        while(QueryLoadData.next()){
-            ui->tableWidget->setItem(row_number, 0, new QTableWidgetItem(QString(QueryLoadData.value("Student_ID").toString())));
-            ui->tableWidget->setItem(row_number, 1, new QTableWidgetItem(QString(QueryLoadData.value("Review").toString())));
-            row_number++;
+    q.prepare("SELECT * FROM classes");
+    if(q.exec()){
+        while(q.next()){
+            ui->listWidget_showClasses->addItem(q.value("id").toString()
+                                                + "\t"
+                                                + q.value("title").toString());
         }
     }
 
     //commit request to DB
-    QSqlDatabase::database().commit();
+    db.database().commit();
+    //close connection
+    db.close();
 }
-

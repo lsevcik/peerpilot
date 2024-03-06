@@ -18,12 +18,13 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-private slots:
-    void on_pushButton_InsertData_clicked();
+    void getDBconnection();
+    void fillTable();
 
-    void on_pushButton_InsertData_2_clicked();
+private slots:
 
 private:
     Ui::MainWindow *ui;
+    QSqlDatabase db;
 };
 #endif // MAINWINDOW_H
