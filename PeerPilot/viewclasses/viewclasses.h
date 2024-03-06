@@ -1,13 +1,13 @@
 #ifndef VIEWCLASSES_H
 #define VIEWCLASSES_H
 
-#include <QWidget>
+#include <QDialog>
 
 namespace Ui {
 class viewclasses;
 }
 
-class viewclasses : public QWidget
+class viewclasses : public QDialog
 {
     Q_OBJECT
 

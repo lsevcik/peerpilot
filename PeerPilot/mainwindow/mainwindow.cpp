@@ -1,11 +1,14 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
+#include "../viewclasses/viewclasses.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    auto dialog = new viewclasses(this);
+    dialog->exec();
 }
 
 MainWindow::~MainWindow()
@@ -14,12 +17,7 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::getDBconnection(){
-    db = QSqlDatabase::database("QSQLITE");
-    qDebug() << db.drivers();
-    if(db.isOpen())
         fillTable();
-    else
-        qDebug() << db.lastError();
 }
 
 void MainWindow::fillTable(){

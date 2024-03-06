@@ -38,9 +38,14 @@ QSqlError initDb() {
     QStringList tables = db.tables();
     QSqlQuery q;
 
-    if (tables.contains("classes", Qt::CaseInsensitive))
+    if (tables.contains("classes", Qt::CaseInsensitive)) {
         if (!q.exec(CLASSES_SQL))
             return q.lastError();
+        q.prepare("INSERT INTO classes (title) VALUES (?)");
+        q.addBindValue("Test");
+        if (!q.exec())
+            return q.lastError();
+    }
 
     if (tables.contains("students", Qt::CaseInsensitive))
         if (!q.exec(STUDENTS_SQL))
