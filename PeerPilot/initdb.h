@@ -2,11 +2,11 @@
 
 // TODO: Extend table schema
 const auto CLASSES_SQL = QString(R"(
-    create table classes(
-        id integer primary key,
-        title varchar not null,
-        canvas_id integer,
-        sis_id integer
+    CREATE TABLE classes(
+        id INTEGER PRIMARY KEY,
+        title VARCHAR NOT NULL,
+        canvas_id INTEGER,
+        sis_id INTEGER
     )
     )");
 
@@ -38,7 +38,7 @@ QSqlError initDb() {
     QStringList tables = db.tables();
     QSqlQuery q;
 
-    if (tables.contains("classes", Qt::CaseInsensitive)) {
+    if (!tables.contains("classes", Qt::CaseInsensitive)) {
         if (!q.exec(CLASSES_SQL))
             return q.lastError();
         q.prepare("INSERT INTO classes (title) VALUES (?)");
@@ -47,11 +47,11 @@ QSqlError initDb() {
             return q.lastError();
     }
 
-    if (tables.contains("students", Qt::CaseInsensitive))
+    if (!tables.contains("students", Qt::CaseInsensitive))
         if (!q.exec(STUDENTS_SQL))
             return q.lastError();
 
-    if (tables.contains("groups", Qt::CaseInsensitive))
+    if (!tables.contains("groups", Qt::CaseInsensitive))
         if (!q.exec(GROUPS_SQL))
             return q.lastError();
 
