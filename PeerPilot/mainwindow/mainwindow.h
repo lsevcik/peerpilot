@@ -18,13 +18,12 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void getDBconnection();
-    void fillTable();
 
 private slots:
+    void on_actionManage_Classes_triggered();
+    void on_actionExit_triggered();
 
 private:
     Ui::MainWindow *ui;
-    QSqlDatabase db;
 };
 #endif // MAINWINDOW_H
