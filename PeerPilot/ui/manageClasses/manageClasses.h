@@ -2,6 +2,7 @@
 #define VIEWCLASSES_H
 
 #include <QDialog>
+#include <QtSql>
 
 namespace Ui {
 class manageClasses;
@@ -17,9 +18,11 @@ public:
 
 private slots:
     void on_createButton_clicked();
+    void on_updateButton_clicked();
 
 private:
     Ui::manageClasses *ui;
+    QSqlTableModel classListModel;
 };
 
 #endif // VIEWCLASSES_H

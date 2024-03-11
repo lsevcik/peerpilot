@@ -1,16 +1,17 @@
 #include "manageClasses.h"
 #include "ui_manageClasses.h"
 #include "../createClass/createClass.h"
-#include <QtSql>
+#include <QInputDialog>
 
 manageClasses::manageClasses(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::manageClasses)
 {
     ui->setupUi(this);
-    QSqlQueryModel* model = new QSqlQueryModel;
-    model->setQuery("SELECT title FROM classes");
-    ui->classListView->setModel(model);
+    classListModel.setTable("classes");
+    classListModel.select();
+    ui->classListView->setModel(&classListModel);
+    ui->classListView->setModelColumn(1);
     ui->classListView->show();
 }
 
@@ -20,6 +21,22 @@ manageClasses::~manageClasses()
 }
 
 void manageClasses::on_createButton_clicked() {
-    auto dialog = new createClass(this);
+    bool ok;
+    QString className = QInputDialog::getText(this, "Class Name?", "Class Name:", QLineEdit::Normal, "", &ok);
+    if (!ok)
+        return;
+
+    auto nameField = QSqlField("title", QVariant::String, "classes");
+    nameField.setValue(className);
+    auto classRecord = QSqlRecord();
+    classRecord.append(nameField);
+    classListModel.insertRecord(-1, classRecord);
+    auto dialog = new createClass(this, className);
+    dialog->exec();
+}
+
+void manageClasses::on_updateButton_clicked() {
+    QString className = ui->classListView->selectionModel()->currentIndex().data().toString();
+    auto dialog = new createClass(this, className);
     dialog->exec();
 }
