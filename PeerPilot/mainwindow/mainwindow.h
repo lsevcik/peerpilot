@@ -22,6 +22,8 @@ public:
 private slots:
     void on_actionManage_Classes_triggered();
     void on_actionExit_triggered();
+    void on_actionAbout_triggered();
+    void on_actionAbout_Qt_triggered();
 
 private:
     Ui::MainWindow *ui;
