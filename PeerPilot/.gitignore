@@ -45,6 +45,7 @@ target_wrapper.*
 # QtCreator CMake
 CMakeLists.txt.user
 CMakeLists.txt.user*
+CMakeUserPresets.json
 
 # QtCreator 4.8< compilation database
 compile_commands.json
@@ -55,3 +56,6 @@ compile_commands.json
 *_qmlcache.qrc
 
 out/
+
+/vcpkg_installed/
+/vcpkg-configuration.json
