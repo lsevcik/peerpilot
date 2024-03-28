@@ -55,10 +55,58 @@ void createClass::on_savePushButton_clicked() {
     this->close();
 }
 
-void createClass::on_importPushButton_clicked() {
+int createClass::on_importPushButton_clicked() {
     QFileDialog dialog(this);
     auto fileName = QFileDialog::getOpenFileName(this,
         tr("Open Roster"), QDir::homePath(), tr("Spreadsheets (*.xls *.xlsx *.csv)"));
-    QMessageBox::information(this, "PeerPilot", "Uninplemented :(");
-    // TODO: Import contents of class roster
+
+    QFile file(fileName);
+
+    if (!file.exists())
+        return QMessageBox::warning(this, "PeerPilot", "File does not exist");
+
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return QMessageBox::warning(this, "PeerPilot", "Error opening file");
+
+    QTextStream s(&file);
+
+    if (s.atEnd() || s.read(56) != "Student,ID,SIS User ID,SIS Login ID,Root Account,Section")
+        return QMessageBox::warning(this, "PeerPilot", "Incorrect format");
+    
+    // Ignore the rest of the headers
+    s.readLine();
+    s.readLine();
+
+    while (!s.atEnd()) {
+        auto components = s.readLine().split(',');
+        // TODO parse csv correctly
+
+        auto classField = QSqlField("class_id", QVariant::Int, "students");
+        classField.setValue(classId);
+
+        auto nameField = QSqlField("name", QVariant::String, "students");
+        nameField.setValue(components[1] + " " + components[0]);
+        // TODO: Strip quotes
+
+        auto canvasIdField = QSqlField("canvas_id", QVariant::Int, "students");
+        canvasIdField.setValue(components[2]);
+
+        auto sisIdField = QSqlField("sis_id", QVariant::Int, "students");
+        sisIdField.setValue(components[3]);
+
+        auto sisUsernameField = QSqlField("sis_username", QVariant::String, "students");
+        sisUsernameField.setValue(components[4]);
+
+        auto sectionField = QSqlField("section", QVariant::String, "students");
+        sectionField.setValue(components[6]);
+
+        auto studentRecord = QSqlRecord();
+        studentRecord.append(classField);
+        studentRecord.append(nameField);
+        studentRecord.append(canvasIdField);
+        studentRecord.append(sisIdField);
+        studentRecord.append(sisUsernameField);
+        studentRecord.append(sectionField);
+        studentListModel.insertRecord(-1, studentRecord);
+    }
 }

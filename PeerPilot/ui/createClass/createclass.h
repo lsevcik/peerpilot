@@ -19,7 +19,7 @@ public:
 private slots:
     void on_manualEntryNamePushButton_clicked();
     void on_savePushButton_clicked();
-    void on_importPushButton_clicked();
+    int on_importPushButton_clicked();
 
 private:
     Ui::createClass *ui;
