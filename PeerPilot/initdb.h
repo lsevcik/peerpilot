@@ -1,4 +1,5 @@
 #include <QtSql>
+#include <QDir>
 
 const auto CLASSES_SQL = QString(R"(
     CREATE TABLE classes(
@@ -20,37 +21,43 @@ const auto STUDENTS_SQL = QString(R"(
     )
 )");
 
+#ifdef NDEBUG
+const auto TEST_DATA = false;
+const auto DATABASE_LOCATION = QDir::homePath() + "/Documents/PeerPilot.db";
+#else
 const auto TEST_DATA = true;
+const auto DATABASE_LOCATION = ":memory:";
+#endif
 
-QSqlError initDb() {
+void initDb() {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName(":memory:");
+    db.setDatabaseName(DATABASE_LOCATION);
 
     if (!db.open())
-        return db.lastError();
+        throw db.lastError();
 
     QStringList tables = db.tables();
     QSqlQuery q;
 
     if (!tables.contains("classes", Qt::CaseInsensitive))
         if (!q.exec(CLASSES_SQL))
-            return q.lastError();
+            throw q.lastError();
 
     if (!tables.contains("students", Qt::CaseInsensitive))
         if (!q.exec(STUDENTS_SQL))
-            return q.lastError();
+            throw q.lastError();
 
     if (TEST_DATA) {
         q.prepare("INSERT INTO classes (title) VALUES (?)");
 
         q.addBindValue("Class 1");
         if (!q.exec())
-            return q.lastError();
+            throw q.lastError();
         QString class1Id = q.lastInsertId().toString();
 
         q.addBindValue("Class 2");
         if (!q.exec())
-            return q.lastError();
+            throw q.lastError();
         QString class2Id = q.lastInsertId().toString();
 
         q.prepare("INSERT INTO students (name, class_id) VALUES (?, ?)");
@@ -60,10 +67,8 @@ QSqlError initDb() {
                 q.addBindValue(QString("Student ") + static_cast<char>('1' + i));
                 q.addBindValue(classId);
                 if (!q.exec())
-                    return q.lastError();
+                    throw q.lastError();
             }
         }
     }
-
-    return QSqlError();
 }
