@@ -85,8 +85,7 @@ int createClass::on_importPushButton_clicked() {
         classField.setValue(classId);
 
         auto nameField = QSqlField("name", QVariant::String, "students");
-        nameField.setValue(components[1] + " " + components[0]);
-        // TODO: Strip quotes
+        nameField.setValue(components[0].removeAt(0) + ',' + components[1].removeAt(components[1].size()-1));
 
         auto canvasIdField = QSqlField("canvas_id", QVariant::Int, "students");
         canvasIdField.setValue(components[2]);
