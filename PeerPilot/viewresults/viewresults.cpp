@@ -1,10 +1,10 @@
-#include "viewclasses.h"
-#include "ui_viewclasses.h"
+#include "viewresults.h"
+#include "ui_viewresults.h"
 #include <QtSql>
 
-viewclasses::viewclasses(QWidget *parent)
+viewresults::viewresults(QWidget *parent)
     : QDialog(parent)
-    , ui(new Ui::viewclasses)
+    , ui(new Ui::viewresults)
 {
     ui->setupUi(this);
     QSqlQueryModel* model = new QSqlQueryModel;
@@ -16,7 +16,7 @@ viewclasses::viewclasses(QWidget *parent)
     ui->classListView->show();
 }
 
-viewclasses::~viewclasses()
+viewresults::~viewresults()
 {
     delete ui;
 }

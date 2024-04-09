@@ -18,7 +18,7 @@ set(PROJECT_SOURCES
         mainwindow/mainwindow.cpp mainwindow/mainwindow.ui mainwindow/mainwindow.h
         ui/manageClasses/manageClasses.cpp ui/manageClasses/manageClasses.ui ui/manageClasses/manageClasses.h
         ui/createClass/createClass.cpp ui/createClass/createClass.ui ui/createClass/createClass.h
-        viewclasses/viewclasses.ui
+        viewresults/viewresults.cpp viewresults/viewresults.ui viewresults/viewresults.h
         viewquizresults/viewquizresults.cpp viewquizresults/viewquizresults.ui viewquizresults/viewquizresults.h
 
 )
