@@ -6,22 +6,36 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>292</width>
-    <height>341</height>
+    <width>400</width>
+    <height>400</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Create Class</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(42, 60, 72);
+font: 10pt &quot;Calibri&quot;;</string>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox">
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);
+font: 11pt &quot;Calibri&quot;;</string>
+     </property>
      <property name="title">
       <string>Create New Class</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="2" column="2">
        <widget class="QPushButton" name="manualEntryNamePushButton">
+        <property name="styleSheet">
+         <string notr="true">color: rgb(42, 60, 70);
+background-color: rgb(215, 209, 209);
+border-top-color: rgb(0, 85, 255);
+font: 12pt &quot;Calibri&quot;;</string>
+        </property>
         <property name="text">
          <string>Manual Entry</string>
         </property>
@@ -29,6 +43,12 @@
       </item>
       <item row="3" column="2">
        <widget class="QPushButton" name="savePushButton">
+        <property name="styleSheet">
+         <string notr="true">color: rgb(42, 60, 70);
+background-color: rgb(215, 209, 209);
+border-top-color: rgb(0, 85, 255);
+font: 12pt &quot;Calibri&quot;;</string>
+        </property>
         <property name="text">
          <string>Save</string>
         </property>
@@ -36,19 +56,41 @@
       </item>
       <item row="3" column="0" colspan="2">
        <widget class="QPushButton" name="importPushButton">
+        <property name="styleSheet">
+         <string notr="true">color: rgb(42, 60, 70);
+background-color: rgb(215, 209, 209);
+border-top-color: rgb(0, 85, 255);
+font: 12pt &quot;Calibri&quot;;</string>
+        </property>
         <property name="text">
          <string>Import Roster</string>
         </property>
        </widget>
       </item>
       <item row="2" column="0" colspan="2">
-       <widget class="QLineEdit" name="studentNameLineEdit"/>
+       <widget class="QLineEdit" name="studentNameLineEdit">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(255, 255, 255);
+font: 12pt &quot;Calibri&quot;;
+color: rgb(0, 0, 0);</string>
+        </property>
+       </widget>
       </item>
       <item row="0" column="1" colspan="2">
-       <widget class="QLineEdit" name="classNameLineEdit"/>
+       <widget class="QLineEdit" name="classNameLineEdit">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(255, 255, 255);
+font: 12pt &quot;Calibri&quot;;
+color: rgb(0, 0, 0);</string>
+        </property>
+       </widget>
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="classNameLabel">
+        <property name="styleSheet">
+         <string notr="true">font: 12pt &quot;Calibri&quot;;
+color: rgb(255, 255, 255);</string>
+        </property>
         <property name="text">
          <string>Class Name</string>
         </property>
@@ -56,6 +98,11 @@
       </item>
       <item row="1" column="0" colspan="3">
        <widget class="QTableView" name="studentTableView">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(255, 255, 255);
+font: 12pt &quot;Calibri&quot;;
+color: rgb(0, 0, 0);</string>
+        </property>
         <property name="alternatingRowColors">
          <bool>true</bool>
         </property>

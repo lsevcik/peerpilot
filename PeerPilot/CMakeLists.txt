@@ -14,15 +14,20 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Sql)
 
 set(PROJECT_SOURCES
         main.cpp
-        mainwindow/mainwindow.cpp mainwindow/mainwindow.ui
-        ui/manageClasses/manageClasses.cpp ui/manageClasses/manageClasses.ui
-        ui/createClass/createClass.cpp ui/createClass/createClass.ui
+        initdb.h
+        mainwindow/mainwindow.cpp mainwindow/mainwindow.ui mainwindow/mainwindow.h
+        ui/manageClasses/manageClasses.cpp ui/manageClasses/manageClasses.ui ui/manageClasses/manageClasses.h
+        ui/createClass/createClass.cpp ui/createClass/createClass.ui ui/createClass/createClass.h
+        viewclasses/viewclasses.ui
+        viewquizresults/viewquizresults.cpp viewquizresults/viewquizresults.ui viewquizresults/viewquizresults.h
+
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(PeerPilot
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        resources.qrc
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET PeerPilot APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
