@@ -54,9 +54,9 @@ color: rgb(0, 0, 0);</string>
         <item>
          <widget class="QPushButton" name="importQuizResultsPushButton">
           <property name="styleSheet">
-           <string notr="true">color: rgb(42, 60, 70);
-background-color: rgb(215, 209, 209);
-border-top-color: rgb(0, 85, 255);
+           <string notr="true">border-top-color: rgb(0, 85, 255);
+background-color: rgb(230, 112, 43);
+color: rgb(255, 255, 255);
 font: 12pt &quot;Calibri&quot;;</string>
           </property>
           <property name="text">
@@ -67,9 +67,9 @@ font: 12pt &quot;Calibri&quot;;</string>
         <item>
          <widget class="QPushButton" name="pushButton">
           <property name="styleSheet">
-           <string notr="true">color: rgb(42, 60, 70);
-background-color: rgb(215, 209, 209);
-border-top-color: rgb(0, 85, 255);
+           <string notr="true">border-top-color: rgb(0, 85, 255);
+background-color: rgb(230, 112, 43);
+color: rgb(255, 255, 255);
 font: 12pt &quot;Calibri&quot;;</string>
           </property>
           <property name="text">
@@ -93,9 +93,9 @@ font: 12pt &quot;Calibri&quot;;</string>
         <item>
          <widget class="QPushButton" name="pushButton_2">
           <property name="styleSheet">
-           <string notr="true">color: rgb(42, 60, 70);
-background-color: rgb(215, 209, 209);
-border-top-color: rgb(0, 85, 255);
+           <string notr="true">border-top-color: rgb(0, 85, 255);
+background-color: rgb(230, 112, 43);
+color: rgb(255, 255, 255);
 font: 12pt &quot;Calibri&quot;;</string>
           </property>
           <property name="text">

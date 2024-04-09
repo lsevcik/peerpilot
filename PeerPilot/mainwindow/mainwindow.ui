@@ -97,9 +97,9 @@
         </property>
         <property name="styleSheet">
          <string notr="true">font: 18pt &quot;Calibri&quot;;
-color: rgb(42, 60, 70);
-background-color: rgb(215, 209, 209);
-border-top-color: rgb(0, 85, 255);</string>
+border-top-color: rgb(0, 85, 255);
+background-color: rgb(230, 112, 43);
+color: rgb(255, 255, 255);</string>
         </property>
         <property name="text">
          <string>View Results</string>
@@ -148,9 +148,9 @@ border-top-color: rgb(0, 85, 255);</string>
         </property>
         <property name="styleSheet">
          <string notr="true">font: 18pt &quot;Calibri&quot;;
-color: rgb(42, 60, 70);
-background-color: rgb(215, 209, 209);
-border-top-color: rgb(0, 85, 255);</string>
+border-top-color: rgb(0, 85, 255);
+background-color: rgb(230, 112, 43);
+color: rgb(255, 255, 255);</string>
         </property>
         <property name="text">
          <string>Create a New Survey</string>
