@@ -20,6 +20,9 @@ set(PROJECT_SOURCES
         ui/createClass/createClass.cpp ui/createClass/createClass.ui ui/createClass/createClass.h
         viewresults/viewresults.cpp viewresults/viewresults.ui viewresults/viewresults.h
         viewquizresults/viewquizresults.cpp viewquizresults/viewquizresults.ui viewquizresults/viewquizresults.h
+        PeerPilotSurveyReader.h
+        PeerPilotSurveyReader.cpp
+        #PeerPilotSurveyReaderTest.cpp
 
 )
 
