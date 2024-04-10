@@ -11,7 +11,7 @@ viewquizresults::viewquizresults(QWidget *parent, std::string filePath, QString 
     , ui(new Ui::viewquizresults)
 {
     ui->setupUi(this);
-    connect(ui->resultListView, &QListView::indexesMoved, this, &viewquizresults::on_resultListView_indexesMoved);
+    connect(ui->resultListView, &QListView::clicked, this, &viewquizresults::on_resultListView_clicked);
 
     //QMessageBox::information(this, "PeerPilot", className);
     // Call the getData function with the file path
@@ -69,11 +69,13 @@ viewquizresults::~viewquizresults()
     delete ui;
 }
 
-void viewquizresults::on_resultListView_indexesMoved(const QModelIndexList &indexes){
+void viewquizresults::on_resultListView_clicked(const QModelIndex &index){
+    QString selectedItem = index.data().toString();
+    QMessageBox::information(this, "PeerPilot", selectedItem);
+    //QMessageBox::information(this, "PeerPilot", "className");
 
-    QMessageBox::information(this, "PeerPilot", "className");
     // Get selected class
-    std::string name = ui->resultListView->selectionModel()->currentIndex().data().toString().toStdString();
+    std::string name = selectedItem.toStdString();
 
     std::vector<PeerReview> peerReviews = responses.getPeerReviewsByPeerName(name);
 

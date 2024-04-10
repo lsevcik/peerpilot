@@ -20,12 +20,14 @@ public:
     std::vector<std::string> titles;
 
 private slots:
-    void on_resultListView_indexesMoved(const QModelIndexList &indexes);
+    //void on_resultListView_indexesMoved(const QModelIndexList &indexes);
+    void on_resultListView_clicked(const QModelIndex &index);
 
 private:
     Ui::viewquizresults *ui;
     QSqlQuery q;
     QSqlTableModel studentListModel;
+
 };
 
 #endif // VIEWQUIZRESULTS_H
