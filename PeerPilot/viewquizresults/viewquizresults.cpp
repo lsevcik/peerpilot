@@ -30,7 +30,7 @@ viewquizresults::viewquizresults(QWidget *parent, std::string filePath, QString 
     ui->questionComboBox->addItems(QTitles);
 
     // Get students from database
-    QStringList students;
+
 
     q.prepare("SELECT students.name FROM students JOIN classes ON students.class_id = classes.id WHERE title=?");
     q.addBindValue(className);
@@ -136,3 +136,39 @@ void viewquizresults::on_exportSinglePushButton_clicked(){
     f.QIODevice::write(fileContents.c_str());
     f.close();
 }
+
+void viewquizresults::on_exportAllPushButton_clicked(){
+    if(!ui->resultListView->currentIndex().isValid()){
+        return;
+    }
+
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Select Output Directory"),
+                                                    "/home",
+                                                    QFileDialog::ShowDirsOnly
+                                                        | QFileDialog::DontResolveSymlinks);
+
+    for(auto student : students){
+        std::vector<PeerReview> peerReviews = responses.getPeerReviewsByPeerName(student.toStdString());
+
+        std::string fileContents = "";
+
+        for (int i = 0; i < peerReviews[0].getAnswers().size(); i++)
+        {
+            fileContents += titles[i] + "\n";
+            for (auto& review : peerReviews) {
+                fileContents += review.getAnswers()[i] + "\n";
+            }
+            fileContents += "\n";
+        }
+
+        QString fileName = dir+"/"+student+".txt";
+
+        QFile f( fileName );
+        f.open( QIODevice::WriteOnly );
+        // store data in f
+        f.QIODevice::write(fileContents.c_str());
+        f.close();
+    }
+}
+
+

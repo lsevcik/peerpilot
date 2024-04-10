@@ -132,6 +132,19 @@ font: 12pt &quot;Calibri&quot;;</string>
          </widget>
         </item>
         <item>
+         <widget class="QPushButton" name="exportAllPushButton">
+          <property name="styleSheet">
+           <string notr="true">border-top-color: rgb(0, 85, 255);
+background-color: rgb(230, 112, 43);
+color: rgb(255, 255, 255);
+font: 12pt &quot;Calibri&quot;;</string>
+          </property>
+          <property name="text">
+           <string>Export All Students</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="backPushButton">
           <property name="styleSheet">
            <string notr="true">border-top-color: rgb(0, 85, 255);
