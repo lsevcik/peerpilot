@@ -89,9 +89,6 @@ void viewquizresults::on_questionComboBox_currentIndexChanged(int index){
     if(!ui->resultListView->currentIndex().isValid()){
         return;
     }
-    //if(!ui->resultListView->selectionModel()->currentIndex().isValid()){
-    //    return;
-    //}
     QString selectedStudent = ui->resultListView->selectionModel()->currentIndex().data().toString();
 
     std::vector<PeerReview> peerReviews = responses.getPeerReviewsByPeerName(selectedStudent.toStdString());
@@ -108,4 +105,34 @@ void viewquizresults::on_questionComboBox_currentIndexChanged(int index){
     ui->answerTextEdit->clear();
     ui->answerTextEdit->append(QString::fromStdString(responseString));
 
+}
+
+void viewquizresults::on_exportSinglePushButton_clicked(){
+    if(!ui->resultListView->currentIndex().isValid()){
+        return;
+    }
+
+    QString selectedStudent = ui->resultListView->selectionModel()->currentIndex().data().toString();
+
+    std::vector<PeerReview> peerReviews = responses.getPeerReviewsByPeerName(selectedStudent.toStdString());
+
+    std::string fileContents = "";
+
+    for (int i = 0; i < peerReviews[0].getAnswers().size(); i++)
+    {
+        fileContents += titles[i] + "\n";
+        for (auto& review : peerReviews) {
+            fileContents += review.getAnswers()[i] + "\n";
+        }
+        fileContents += "\n";
+    }
+
+    std::string suggestedFileName = selectedStudent.toStdString()+".txt";
+
+    QString filename = QFileDialog::getSaveFileName(this, tr("Save File"), suggestedFileName.c_str());
+    QFile f( filename );
+    f.open( QIODevice::WriteOnly );
+    // store data in f
+    f.QIODevice::write(fileContents.c_str());
+    f.close();
 }
