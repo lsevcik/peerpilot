@@ -46,10 +46,11 @@ int viewresults::on_importQuizPushButton_clicked() {
     // Convert QString to std::string
     std::string filePath = fileName.toStdString();
 
-    // Call the getData function with the file path
-    ResponseList responses = getData(filePath);
+    // Get selected class
+    QString className = ui->classListView->selectionModel()->currentIndex().data().toString();
 
-    auto widget = new viewquizresults(this, responses);
+    // Open results view
+    auto widget = new viewquizresults(this, filePath, className);
     widget->show();
 
     /*
@@ -115,7 +116,7 @@ int viewresults::on_importQuizPushButton_clicked() {
         }
     }
     */
-    QMessageBox::information(this, "PeerPilot", "CSV file imported successfully");
+    //QMessageBox::information(this, "PeerPilot", "CSV file imported successfully");
 
     return 0;
 }

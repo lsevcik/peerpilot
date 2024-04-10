@@ -6,12 +6,38 @@
 #include <QWidget>
 #include <QtSql>
 #include <QMessageBox>
-viewquizresults::viewquizresults(QWidget *parent, const ResponseList& responses)
+viewquizresults::viewquizresults(QWidget *parent, std::string filePath, QString className)
     : QWidget(parent)
     , ui(new Ui::viewquizresults)
 {
     ui->setupUi(this);
+    connect(ui->resultListView, &QListView::indexesMoved, this, &viewquizresults::on_resultListView_indexesMoved);
 
+    //QMessageBox::information(this, "PeerPilot", className);
+    // Call the getData function with the file path
+    responses = getData(filePath);
+
+    // Get question titles from data
+    titles = getQuestionTitles(filePath);
+
+    // Get students from database
+    QStringList students;
+
+    q.prepare("SELECT students.name FROM students JOIN classes ON students.class_id = classes.id WHERE title=?");
+    q.addBindValue("Class 1");
+    q.exec();
+
+    while (q.next()) {
+        students << q.value(0).toString();
+    }
+
+    QStringListModel *model = new QStringListModel(students);
+
+    // Set the model to the resultListView
+    ui->resultListView->setModel(model);
+
+
+    /*
     for (const auto& response : responses.getResponses()) {
         // Generate string representation of each response
         std::string responseString = "Response Name: " + response.getName() + "\n";
@@ -34,10 +60,33 @@ viewquizresults::viewquizresults(QWidget *parent, const ResponseList& responses)
         ui->answerTextEdit->append(QString::fromStdString(responseString));
     }
     ui->answerTextEdit->append(QString::fromStdString("test"));
+*/
 
 }
 
 viewquizresults::~viewquizresults()
 {
     delete ui;
+}
+
+void viewquizresults::on_resultListView_indexesMoved(const QModelIndexList &indexes){
+
+    QMessageBox::information(this, "PeerPilot", "className");
+    // Get selected class
+    std::string name = ui->resultListView->selectionModel()->currentIndex().data().toString().toStdString();
+
+    std::vector<PeerReview> peerReviews = responses.getPeerReviewsByPeerName(name);
+
+    std::string responseString = "";
+
+    for (int i = 0; i < peerReviews[0].getAnswers().size(); i++)
+    {
+        responseString += titles[i] + "\n";
+        for (auto& review : peerReviews) {
+            responseString += review.getAnswers()[i] + "\n";
+        }
+    }
+
+    ui->answerTextEdit->append(QString::fromStdString(responseString));
+    //ui->answerTextEdit->append(QString::fromStdString("test"));
 }
