@@ -17,6 +17,9 @@
    <string notr="true">background-color: rgb(42, 60, 72);</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
+   <property name="sizeConstraint">
+    <enum>QLayout::SetDefaultConstraint</enum>
+   </property>
    <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="styleSheet">
@@ -34,6 +37,9 @@ color: rgb(255, 255, 255);</string>
 background-color: rgb(255, 255, 255);
 color: rgb(0, 0, 0);</string>
         </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
        </widget>
       </item>
       <item>
@@ -45,6 +51,9 @@ color: rgb(0, 0, 0);</string>
 background-color: rgb(255, 255, 255);
 color: rgb(0, 0, 0);</string>
           </property>
+          <property name="editable">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -53,6 +62,9 @@ color: rgb(0, 0, 0);</string>
            <string notr="true">font: 12pt &quot;Calibri&quot;;
 background-color: rgb(255, 255, 255);
 color: rgb(0, 0, 0);</string>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
           </property>
          </widget>
         </item>

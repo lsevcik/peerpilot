@@ -12,6 +12,7 @@ viewquizresults::viewquizresults(QWidget *parent, std::string filePath, QString 
 {
     ui->setupUi(this);
     connect(ui->resultListView, &QListView::clicked, this, &viewquizresults::on_resultListView_clicked);
+    connect(ui->questionComboBox, &QComboBox::currentIndexChanged, this, &viewquizresults::on_questionComboBox_currentIndexChanged);
 
     //QMessageBox::information(this, "PeerPilot", className);
     // Call the getData function with the file path
@@ -20,11 +21,19 @@ viewquizresults::viewquizresults(QWidget *parent, std::string filePath, QString 
     // Get question titles from data
     titles = getQuestionTitles(filePath);
 
+    // Load questions into combobox
+    QStringList QTitles;
+    for (const auto& title : titles) {
+        QTitles.append(QString::fromStdString(title));
+    }
+
+    ui->questionComboBox->addItems(QTitles);
+
     // Get students from database
     QStringList students;
 
     q.prepare("SELECT students.name FROM students JOIN classes ON students.class_id = classes.id WHERE title=?");
-    q.addBindValue("Class 1");
+    q.addBindValue(className);
     q.exec();
 
     while (q.next()) {
@@ -70,25 +79,33 @@ viewquizresults::~viewquizresults()
 }
 
 void viewquizresults::on_resultListView_clicked(const QModelIndex &index){
-    QString selectedItem = index.data().toString();
-    QMessageBox::information(this, "PeerPilot", selectedItem);
-    //QMessageBox::information(this, "PeerPilot", "className");
 
-    // Get selected class
-    std::string name = selectedItem.toStdString();
+    // Force updare
+    on_questionComboBox_currentIndexChanged(ui->questionComboBox->currentIndex());
 
-    std::vector<PeerReview> peerReviews = responses.getPeerReviewsByPeerName(name);
+}
+
+void viewquizresults::on_questionComboBox_currentIndexChanged(int index){
+    if(!ui->resultListView->currentIndex().isValid()){
+        return;
+    }
+    //if(!ui->resultListView->selectionModel()->currentIndex().isValid()){
+    //    return;
+    //}
+    QString selectedStudent = ui->resultListView->selectionModel()->currentIndex().data().toString();
+
+    std::vector<PeerReview> peerReviews = responses.getPeerReviewsByPeerName(selectedStudent.toStdString());
 
     std::string responseString = "";
 
-    for (int i = 0; i < peerReviews[0].getAnswers().size(); i++)
-    {
-        responseString += titles[i] + "\n";
-        for (auto& review : peerReviews) {
-            responseString += review.getAnswers()[i] + "\n";
-        }
+    if(peerReviews.empty()){
+        ui->answerTextEdit->clear();
+        return;
     }
-
+    for (auto& review : peerReviews) {
+        responseString += review.getAnswers()[index] + "\n\n";
+    }
+    ui->answerTextEdit->clear();
     ui->answerTextEdit->append(QString::fromStdString(responseString));
-    //ui->answerTextEdit->append(QString::fromStdString("test"));
+
 }

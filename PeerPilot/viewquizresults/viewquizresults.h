@@ -22,6 +22,7 @@ public:
 private slots:
     //void on_resultListView_indexesMoved(const QModelIndexList &indexes);
     void on_resultListView_clicked(const QModelIndex &index);
+    void on_questionComboBox_currentIndexChanged(int index);
 
 private:
     Ui::viewquizresults *ui;
