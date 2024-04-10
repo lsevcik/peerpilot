@@ -1,6 +1,3 @@
-//
-// Created by donov on 4/9/2024.
-//
 #include "PeerPilotSurveyReader.h"
 
 // PeerReview
@@ -229,9 +226,9 @@ std::vector<std::string> getQuestionTitles(std::string filePath) {
 
 /*
 int main() {
-    ResponseList responses = getData("data.csv");
+    ResponseList responses = getData("Test_Peer_Review_Survey_Student_Analysis_Report_3.csv");
 
-    std::vector<std::string> titles = getQuestionTitles("data.csv");
+    std::vector<std::string> titles = getQuestionTitles("Test_Peer_Review_Survey_Student_Analysis_Report_3.csv");
 
     std::cout << "Questions:" << std::endl;
     for (auto& title : titles) {

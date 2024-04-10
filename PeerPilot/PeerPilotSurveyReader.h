@@ -1,7 +1,3 @@
-//
-// Created by donov on 4/9/2024.
-//
-
 #ifndef PEERPILOT_PEERPILOTSURVEYREADER_H
 #define PEERPILOT_PEERPILOTSURVEYREADER_H
 
