@@ -10,8 +10,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    connect(ui->viewResultsButton, &QPushButton::clicked, this, &MainWindow::on_actionView_Results_triggered);
-
 }
 
 MainWindow::~MainWindow()
@@ -39,7 +37,7 @@ void MainWindow::on_actionAbout_Qt_triggered()
     QMessageBox::aboutQt(this, "About Qt");
 }
 
-void MainWindow::on_actionView_Results_triggered() {
+void MainWindow::on_viewResultsButton_clicked() {
     auto dialog = new viewresults(this);
     dialog->exec();
 }

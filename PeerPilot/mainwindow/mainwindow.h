@@ -25,7 +25,7 @@ private slots:
     void on_actionAbout_triggered();
     void on_actionAbout_Qt_triggered();
 
-    void on_actionView_Results_triggered();
+    void on_viewResultsButton_clicked();
 
 private:
     Ui::MainWindow *ui;
