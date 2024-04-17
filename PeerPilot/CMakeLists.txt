@@ -22,6 +22,9 @@ set(PROJECT_SOURCES
         viewquizresults/viewquizresults.cpp viewquizresults/viewquizresults.ui viewquizresults/viewquizresults.h
         PeerPilotSurveyReader.h
         PeerPilotSurveyReader.cpp
+        typodetect/typodetect.cpp
+        typodetect/typodetect.h
+        typodetect/typodetect.ui
         #PeerPilotSurveyReaderTest.cpp
 
 )
