@@ -83,6 +83,14 @@ void Response::print() const {
     }
 }
 
+void Response::replaceName(const std::string& oldName, const std::string& newName) {
+    for (auto& review : peerReviews) {
+        if (review.getPeerName() == oldName) {
+            review.setPeerName(newName);
+        }
+    }
+}
+
 // ResponseList
 void ResponseList::addResponse(const Response& response) {
     responses.push_back(response);
@@ -102,6 +110,38 @@ std::vector<PeerReview> ResponseList::getPeerReviewsByPeerName(const std::string
 
 std::vector<Response> ResponseList::getResponses() const {
     return responses;
+}
+
+std::vector<std::string> ResponseList::getUnmatchedNames(const std::vector<std::string>& names) const {
+    std::vector<std::string> unmatchedNames;
+
+    // Collect all peer names from peer reviews
+    std::vector<std::string> allPeerNames;
+    for (const auto& response : responses) {
+        for (const auto& peerReview : response.getPeerReviews()) {
+            allPeerNames.push_back(peerReview.getPeerName());
+        }
+    }
+
+    // Find unmatched names
+    for (const auto& peerName : allPeerNames) {
+        if (std::find(names.begin(), names.end(), peerName) == names.end()) {
+            if (std::find(unmatchedNames.begin(), unmatchedNames.end(), peerName) == unmatchedNames.end())
+            {
+                //continue;
+            }
+            unmatchedNames.push_back(peerName);
+            //std::cout << peerName << std::endl;
+        }
+    }
+
+    return unmatchedNames;
+}
+
+void ResponseList::replaceName(const std::string& oldName, const std::string& newName) {
+    for (auto& resp : responses) {
+        resp.replaceName(oldName, newName);
+    }
 }
 
 bool is_number(const std::string& s) {
@@ -224,34 +264,32 @@ std::vector<std::string> getQuestionTitles(std::string filePath) {
     return titles;
 }
 
-/*
-int main() {
-    ResponseList responses = getData("Test_Peer_Review_Survey_Student_Analysis_Report_3.csv");
+std::string reformatName(const std::string& fullName) {
+    std::string firstName, lastName;
+    size_t commaPos = fullName.find(',');
 
-    std::vector<std::string> titles = getQuestionTitles("Test_Peer_Review_Survey_Student_Analysis_Report_3.csv");
-
-    std::cout << "Questions:" << std::endl;
-    for (auto& title : titles) {
-        std::cout << title << std::endl;
+    if (commaPos != std::string::npos) {
+        lastName = fullName.substr(0, commaPos);
+        firstName = fullName.substr(commaPos + 2); // Skip comma and space
+        return firstName + " " + lastName;
+    } else {
+        // If there is no comma, return the original string
+        return fullName;
     }
-    std::cout << std::endl;
-    std::cout << std::endl;
-
-    std::cout << "Responses:" << std::endl;
-    for (auto& response : responses.getResponses()) {
-        response.print();
-        std::cout << std::endl;
-    }
-    std::cout << std::endl;
-    std::cout << std::endl;
-
-    std::cout << "All responses about John Smith:" << std::endl;
-    std::vector<PeerReview> peerReviews = responses.getPeerReviewsByPeerName("John Smith");
-    for (const auto& peerReview : peerReviews) {
-        peerReview.print();
-        std::cout << std::endl;
-    }
-    return 0;
 }
 
-*/
+std::string getBestMatchingString(std::vector<std::string> names, std::string toMatch) {
+    std::string closestMatch;
+    int maxDistance = 2147483647;
+
+    for (const auto& name : names) {
+        int distance = levenshteinSSE::levenshtein(name, toMatch);
+        if (distance < maxDistance) {
+            maxDistance = distance;
+            closestMatch = name;
+            std::cout << name << " " << distance << std::endl;
+        }
+    }
+
+    return closestMatch;
+}

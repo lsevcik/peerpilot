@@ -2,9 +2,11 @@
 #include "ui_viewresults.h"
 #include "../PeerPilotSurveyReader.h"
 #include "../viewquizresults/viewquizresults.h"
+#include "../typodetect/typodetect.h"
 #include <QFileDialog>
 #include <QtSql>
 #include <QMessageBox>
+#include <utility>
 
 #include <iostream>
 
@@ -50,74 +52,65 @@ int viewresults::on_importQuizPushButton_clicked() {
     // Get selected class
     QString className = ui->classListView->selectionModel()->currentIndex().data().toString();
 
-    // Open results view
-    auto widget = new viewquizresults(this, filePath, className);
-    widget->show();
+    // Call the getData function with the file path
+    ResponseList responses = getData(filePath);
 
-    /*
-    // Read the CSV file using QTextStream
-    QTextStream s(&file);
+    // Get question titles from data
+    std::vector<std::string> titles = getQuestionTitles(filePath);
 
-    QString headersLine = s.readLine();
+    // Get students from database
+    q.prepare("SELECT students.name FROM students JOIN classes ON students.class_id = classes.id WHERE title=?");
+    q.addBindValue(className);
+    q.exec();
 
-    ResponseList responses;
-
-    // Read each line of the CSV file
-    while (!s.atEnd()) {
-        QString line = s.readLine();
-        QStringList components = line.split(',');
-
-        // Process the components and create Response objects
-        QString name = components[0];
-        int id = components[1].toInt();
-
-        Response response(name.toStdString(), id);
-
-        for (int i = 2; i < components.size(); ++i) {
-            PeerReview peerReview(id, "Peer " + QString::number(i - 1).toStdString());
-            peerReview.addAnswer(components[i].toStdString());
-            response.addPeerReview(peerReview);
-        }
-        std::cout << "TEST";
-        response.print();
-        // Add the response to the ResponseList
-        responses.addResponse(response);
+    while (q.next()) {
+        students.push_back(reformatName(q.value(0).toString().toStdString()));
     }
-    */
-    file.close();
-    /*
-    // Insert data into the database
-    QSqlDatabase db = QSqlDatabase::database();
-    QSqlQuery query(db);
 
-    // Iterate over each response and insert data into database
-    for (const Response& response : responses.getResponses()) {
-        // Insert response data into classes table
-        query.prepare("INSERT INTO classes (title) VALUES (:title)");
-        query.bindValue(":title", QString::fromStdString(response.getName()));
-        if (!query.exec()) {
-            qDebug() << "Error inserting data into classes table:" << query.lastError().text();
-            // Handle error
+    // Check for mismatches
+    std::vector<std::string> mismatches = responses.getUnmatchedNames(students);
+
+    if(mismatches.empty()){
+        // Open results view
+        auto widget = new viewquizresults(this, responses, titles, className);
+        widget->show();
+    }
+    else{
+        // Get all closest names to the mismatches
+        std::vector<std::pair<std::string, std::string>> matchList;
+        for(auto& name : mismatches){
+            matchList.push_back(std::make_pair(name, getBestMatchingString(students, name)));
         }
 
-        // Retrieve the last inserted class ID
-        QString classId = query.lastInsertId().toString();
+        //Generate message
+        std::string message = "Unknown names found. The following are automatically generated matchups to known names in the class. Accept?";
+        for(auto& namePair : matchList){
+            message.append("\n" + namePair.first + " -> " + namePair.second);
+        }
 
-        // Insert student data into students table
-        for (const PeerReview& peerReview : response.getPeerReviews()) {
-            query.prepare("INSERT INTO students (name, class_id, canvas_id, sis_id, sis_username, section) "
-                          "VALUES (:name, :class_id, :canvas_id, :sis_id, :sis_username, :section)");
-            query.bindValue(":name", QString::fromStdString(peerReview.getPeerName()));
-            query.bindValue(":class_id", classId);
-            // Add other bindings as needed (canvas_id, sis_id, sis_username, section)
-            if (!query.exec()) {
-                qDebug() << "Error inserting data into students table:" << query.lastError().text();
-                // Handle error
+        QMessageBox::StandardButton reply = QMessageBox::question(this, "Mismatches found", QString::fromUtf8(message.c_str()), QMessageBox::Yes|QMessageBox::No);
+
+        if(reply == QMessageBox::Yes){
+            // Replace all the names
+            for(auto& namePair : matchList){
+                responses.replaceName(namePair.first, namePair.second);
             }
+
+            // Open results view
+            auto widget = new viewquizresults(this, responses, titles, className);
+            widget->show();
+        }
+        else{
+            //open typodetect
         }
     }
-    */
-    //QMessageBox::information(this, "PeerPilot", "CSV file imported successfully");
+
+
+
+
+    file.close();
 
     return 0;
 }
+
+

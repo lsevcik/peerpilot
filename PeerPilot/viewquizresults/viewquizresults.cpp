@@ -6,7 +6,7 @@
 #include <QWidget>
 #include <QtSql>
 #include <QMessageBox>
-viewquizresults::viewquizresults(QWidget *parent, std::string filePath, QString className)
+viewquizresults::viewquizresults(QWidget *parent, ResponseList responsesInput, std::vector<std::string> titlesInput, QString className)
     : QWidget(parent)
     , ui(new Ui::viewquizresults)
 {
@@ -16,10 +16,10 @@ viewquizresults::viewquizresults(QWidget *parent, std::string filePath, QString 
 
     //QMessageBox::information(this, "PeerPilot", className);
     // Call the getData function with the file path
-    responses = getData(filePath);
+    responses = responsesInput;
 
     // Get question titles from data
-    titles = getQuestionTitles(filePath);
+    titles = titlesInput;
 
     // Load questions into combobox
     QStringList QTitles;
@@ -30,8 +30,6 @@ viewquizresults::viewquizresults(QWidget *parent, std::string filePath, QString 
     ui->questionComboBox->addItems(QTitles);
 
     // Get students from database
-
-
     q.prepare("SELECT students.name FROM students JOIN classes ON students.class_id = classes.id WHERE title=?");
     q.addBindValue(className);
     q.exec();

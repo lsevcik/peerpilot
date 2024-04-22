@@ -8,6 +8,8 @@
 #include <string>
 #include <regex>
 #include <unordered_map>
+#include "levenshtein-sse.hpp"
+
 
 class PeerReview {
 private:
@@ -16,6 +18,7 @@ private:
     std::vector<std::string> answers;
 
 public:
+    PeerReview(const std::string& name) : peerName(name) {}
     PeerReview(int id, const std::string& name);
     void setOriginId(int id);
     void setPeerName(const std::string& name);
@@ -42,6 +45,7 @@ public:
     int getId() const;
     std::vector<PeerReview> getPeerReviews() const;
     void print() const;
+    void replaceName(const std::string& oldName, const std::string& newName);
 };
 
 class ResponseList {
@@ -52,6 +56,8 @@ public:
     void addResponse(const Response& response);
     std::vector<PeerReview> getPeerReviewsByPeerName(const std::string& peerName) const;
     std::vector<Response> getResponses() const;
+    std::vector<std::string> getUnmatchedNames(const std::vector<std::string>& names) const;
+    void replaceName(const std::string& oldName, const std::string& newName);
 };
 
 bool is_number(const std::string& s);
@@ -59,5 +65,6 @@ std::vector<std::vector<std::string>> parseCSV(const std::string& filename);
 std::vector<std::vector<std::string>> removePreviousAttempts(const std::vector<std::vector<std::string>>& data, int idcol, int attemptcol);
 ResponseList getData(std::string filePath);
 std::vector<std::string> getQuestionTitles(std::string filePath);
-
+std::string reformatName(const std::string& fullName);
+std::string getBestMatchingString(std::vector<std::string> names, std::string toMatch);
 #endif //PEERPILOT_PEERPILOTSURVEYREADER_H

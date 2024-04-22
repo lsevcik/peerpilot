@@ -14,7 +14,7 @@ class viewquizresults : public QWidget
     Q_OBJECT
 
 public:
-    explicit viewquizresults(QWidget *parent = nullptr, std::string filePath = nullptr, QString className = nullptr);
+    explicit viewquizresults(QWidget *parent, ResponseList responsesInput, std::vector<std::string> titlesInput, QString className);
     ~viewquizresults();
     ResponseList responses;
     std::vector<std::string> titles;
