@@ -2,6 +2,7 @@
 #include "ui_createClass.h"
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QMetaType>
 
 createClass::createClass(QWidget* parent, QString className)
     : QDialog(parent)
@@ -38,9 +39,9 @@ createClass::~createClass() {
 void createClass::on_manualEntryNamePushButton_clicked() {
     auto name = ui->studentNameLineEdit->text();
     ui->studentNameLineEdit->clear();
-    auto nameField = QSqlField("name", QVariant::String, "students");
+    auto nameField = QSqlField("name", QMetaType::fromType<std::string>(), "students");
     nameField.setValue(name);
-    auto classField = QSqlField("class_id", QVariant::Int, "students");
+    auto classField = QSqlField("class_id", QMetaType::fromType<int>(), "students");
     classField.setValue(classId);
     auto studentRecord = QSqlRecord();
     studentRecord.append(nameField);
@@ -81,22 +82,22 @@ int createClass::on_importPushButton_clicked() {
         auto components = s.readLine().split(',');
         // TODO parse csv correctly
 
-        auto classField = QSqlField("class_id", QVariant::Int, "students");
+        auto classField = QSqlField("class_id", QMetaType::fromType<int>(), "students");
         classField.setValue(classId);
 
-        auto nameField = QSqlField("name", QVariant::String, "students");
+        auto nameField = QSqlField("name", QMetaType::fromType<std::string>(), "students");
         nameField.setValue(components[0].removeAt(0) + ',' + components[1].removeAt(components[1].size()-1));
 
-        auto canvasIdField = QSqlField("canvas_id", QVariant::Int, "students");
+        auto canvasIdField = QSqlField("canvas_id", QMetaType::fromType<int>(), "students");
         canvasIdField.setValue(components[2]);
 
-        auto sisIdField = QSqlField("sis_id", QVariant::Int, "students");
+        auto sisIdField = QSqlField("sis_id", QMetaType::fromType<int>(), "students");
         sisIdField.setValue(components[3]);
 
-        auto sisUsernameField = QSqlField("sis_username", QVariant::String, "students");
+        auto sisUsernameField = QSqlField("sis_username", QMetaType::fromType<std::string>(), "students");
         sisUsernameField.setValue(components[4]);
 
-        auto sectionField = QSqlField("section", QVariant::String, "students");
+        auto sectionField = QSqlField("section", QMetaType::fromType<std::string>(), "students");
         sectionField.setValue(components[6]);
 
         auto studentRecord = QSqlRecord();
@@ -108,4 +109,5 @@ int createClass::on_importPushButton_clicked() {
         studentRecord.append(sectionField);
         studentListModel.insertRecord(-1, studentRecord);
     }
+    return 0;
 }

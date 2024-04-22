@@ -26,7 +26,7 @@ void manageClasses::on_createButton_clicked() {
     if (!ok)
         return;
 
-    auto nameField = QSqlField("title", QVariant::String, "classes");
+    auto nameField = QSqlField("title", QMetaType::fromType<std::string>(), "classes");
     nameField.setValue(className);
     auto classRecord = QSqlRecord();
     classRecord.append(nameField);
