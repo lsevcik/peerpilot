@@ -6,7 +6,8 @@
 #include <QWidget>
 #include <QtSql>
 #include <QMessageBox>
-viewquizresults::viewquizresults(QWidget *parent, ResponseList responsesInput, std::vector<std::string> titlesInput, QString className)
+#include <QInputDialog>
+viewquizresults::viewquizresults(QWidget *parent, ResponseList responsesInput, std::vector<std::string> titlesInput, QString classNameInput)
     : QWidget(parent)
     , ui(new Ui::viewquizresults)
 {
@@ -17,6 +18,8 @@ viewquizresults::viewquizresults(QWidget *parent, ResponseList responsesInput, s
     //QMessageBox::information(this, "PeerPilot", className);
     // Call the getData function with the file path
     responses = responsesInput;
+
+    className = classNameInput;
 
     // Get question titles from data
     titles = titlesInput;
@@ -78,12 +81,13 @@ viewquizresults::~viewquizresults()
 
 void viewquizresults::on_resultListView_clicked(const QModelIndex &index){
 
-    // Force updare
+    // Force update
     on_questionComboBox_currentIndexChanged(ui->questionComboBox->currentIndex());
 
 }
 
 void viewquizresults::on_questionComboBox_currentIndexChanged(int index){
+    ui->gradeLineEdit->clear();
     if(!ui->resultListView->currentIndex().isValid()){
         return;
     }
@@ -103,9 +107,28 @@ void viewquizresults::on_questionComboBox_currentIndexChanged(int index){
     ui->answerTextEdit->clear();
     ui->answerTextEdit->append(QString::fromStdString(responseString));
 
+    //set grade
+    for(auto& question : gradedQuestions){
+        if(question.first == ui->questionComboBox->currentText().toStdString()){
+            int grade = 0;
+            for(auto& review : peerReviews){
+                std::string sInput = review.getAnswers()[index];
+                std::string sOutput = std::regex_replace(sInput, std::regex(R"([\D])"), "");
+                grade += std::stoi(sOutput);
+            }
+            grade /= peerReviews.size();
+            ui->gradeLineEdit->insert(QString::number(grade) + "/" + QString::number(question.second));
+        }
+    }
+
 }
 
-void viewquizresults::on_exportSinglePushButton_clicked(){
+void viewquizresults::on_markGradePushButton_clicked(){
+
+    int grade = QInputDialog::getInt(this,"Mark question as graded?","Enter the maximum possible score for this question:\n" + ui->questionComboBox->currentText());
+
+    gradedQuestions.push_back(std::make_pair(ui->questionComboBox->currentText().toStdString(), grade));
+
     if(!ui->resultListView->currentIndex().isValid()){
         return;
     }
@@ -114,8 +137,23 @@ void viewquizresults::on_exportSinglePushButton_clicked(){
 
     std::vector<PeerReview> peerReviews = responses.getPeerReviewsByPeerName(reformatName(selectedStudent.toStdString()));
 
+    // Force update
+    on_questionComboBox_currentIndexChanged(ui->questionComboBox->currentIndex());
+}
+
+void viewquizresults::on_exportGradesPushButton_clicked(){
+    if(!ui->resultListView->currentIndex().isValid()){
+        return;
+    }
+
+    int maxPoints = QInputDialog::getInt(this,"Exporting gradesheet","Enter the maximum points possible for this assignment:\n");
+
     std::string fileContents = "";
 
+    //GET ALL STUDENT DATA, TABULATE GRADES FROM ALL GRADED QUESTIONS
+
+
+    /*
     for (int i = 0; i < peerReviews[0].getAnswers().size(); i++)
     {
         fileContents += titles[i] + "\n";
@@ -123,9 +161,9 @@ void viewquizresults::on_exportSinglePushButton_clicked(){
             fileContents += review.getAnswers()[i] + "\n";
         }
         fileContents += "\n";
-    }
+    }*/
 
-    std::string suggestedFileName = selectedStudent.toStdString()+".txt";
+    std::string suggestedFileName = className.toStdString()+".csv";
 
     QString filename = QFileDialog::getSaveFileName(this, tr("Save File"), suggestedFileName.c_str());
     QFile f( filename );

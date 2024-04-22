@@ -19,13 +19,16 @@ public:
     ResponseList responses;
     std::vector<std::string> titles;
     QStringList students;
+    std::vector<std::pair<std::string, int>> gradedQuestions;
+    QString className;
 
 private slots:
     //void on_resultListView_indexesMoved(const QModelIndexList &indexes);
     void on_resultListView_clicked(const QModelIndex &index);
     void on_questionComboBox_currentIndexChanged(int index);
-    void on_exportSinglePushButton_clicked();
+    void on_exportGradesPushButton_clicked();
     void on_exportAllPushButton_clicked();
+    void on_markGradePushButton_clicked();
 
 private:
     Ui::viewquizresults *ui;

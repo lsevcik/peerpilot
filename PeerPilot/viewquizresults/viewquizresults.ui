@@ -52,12 +52,15 @@ background-color: rgb(255, 255, 255);
 color: rgb(0, 0, 0);</string>
           </property>
           <property name="editable">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QTextEdit" name="answerTextEdit">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="styleSheet">
            <string notr="true">font: 12pt &quot;Calibri&quot;;
 background-color: rgb(255, 255, 255);
@@ -119,7 +122,7 @@ color: rgb(255, 255, 255);</string>
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="exportSinglePushButton">
+         <widget class="QPushButton" name="markGradePushButton">
           <property name="styleSheet">
            <string notr="true">border-top-color: rgb(0, 85, 255);
 background-color: rgb(230, 112, 43);
@@ -127,7 +130,20 @@ color: rgb(255, 255, 255);
 font: 12pt &quot;Calibri&quot;;</string>
           </property>
           <property name="text">
-           <string>Export Selected Student</string>
+           <string>Mark Question as Graded</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="exportGradesPushButton">
+          <property name="styleSheet">
+           <string notr="true">border-top-color: rgb(0, 85, 255);
+background-color: rgb(230, 112, 43);
+color: rgb(255, 255, 255);
+font: 12pt &quot;Calibri&quot;;</string>
+          </property>
+          <property name="text">
+           <string>Export Gradesheet</string>
           </property>
          </widget>
         </item>
