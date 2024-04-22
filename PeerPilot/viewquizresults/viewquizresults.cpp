@@ -89,7 +89,7 @@ void viewquizresults::on_questionComboBox_currentIndexChanged(int index){
     }
     QString selectedStudent = ui->resultListView->selectionModel()->currentIndex().data().toString();
 
-    std::vector<PeerReview> peerReviews = responses.getPeerReviewsByPeerName(selectedStudent.toStdString());
+    std::vector<PeerReview> peerReviews = responses.getPeerReviewsByPeerName(reformatName(selectedStudent.toStdString()));
 
     std::string responseString = "";
 
@@ -112,7 +112,7 @@ void viewquizresults::on_exportSinglePushButton_clicked(){
 
     QString selectedStudent = ui->resultListView->selectionModel()->currentIndex().data().toString();
 
-    std::vector<PeerReview> peerReviews = responses.getPeerReviewsByPeerName(selectedStudent.toStdString());
+    std::vector<PeerReview> peerReviews = responses.getPeerReviewsByPeerName(reformatName(selectedStudent.toStdString()));
 
     std::string fileContents = "";
 
@@ -146,7 +146,7 @@ void viewquizresults::on_exportAllPushButton_clicked(){
                                                         | QFileDialog::DontResolveSymlinks);
 
     for(auto student : students){
-        std::vector<PeerReview> peerReviews = responses.getPeerReviewsByPeerName(student.toStdString());
+        std::vector<PeerReview> peerReviews = responses.getPeerReviewsByPeerName(reformatName(student.toStdString()));
 
         std::string fileContents = "";
 
