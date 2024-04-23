@@ -19,7 +19,8 @@ public:
     ResponseList responses;
     std::vector<std::string> titles;
     QStringList students;
-    std::vector<std::pair<std::string, int>> gradedQuestions;
+    // question index, question max points
+    std::vector<std::pair<int, int>> gradedQuestions;
     QString className;
 
 private slots:

@@ -293,3 +293,22 @@ std::string getBestMatchingString(std::vector<std::string> names, std::string to
 
     return closestMatch;
 }
+
+std::string makeSafeForCSV(const std::string& input) {
+    std::string output = input;
+
+    // Check if the string contains special characters
+    if (output.find_first_of(",\"\n") != std::string::npos) {
+        // Escape double quotes by doubling them
+        size_t pos = output.find("\"");
+        while (pos != std::string::npos) {
+            output.replace(pos, 1, "\"\"");
+            pos = output.find("\"", pos + 2);
+        }
+
+        // Enclose the string in double quotes
+        output = "\"" + output + "\"";
+    }
+
+    return output;
+}

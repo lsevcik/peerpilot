@@ -67,4 +67,5 @@ ResponseList getData(std::string filePath);
 std::vector<std::string> getQuestionTitles(std::string filePath);
 std::string reformatName(const std::string& fullName);
 std::string getBestMatchingString(std::vector<std::string> names, std::string toMatch);
+std::string makeSafeForCSV(const std::string& input);
 #endif //PEERPILOT_PEERPILOTSURVEYREADER_H
