@@ -14,11 +14,14 @@ class typodetect : public QWidget
     Q_OBJECT
 
 public:
-    explicit typodetect(QWidget *parent = nullptr, std::string filePath = nullptr, QString className = nullptr);
+    explicit typodetect(QWidget *parent, ResponseList responsesInput, std::vector<std::string> titlesInput, QString classNameInput, std::vector<std::pair<std::string, std::string>> matchListInput);
     ~typodetect();
     ResponseList responses;
     std::vector<std::string> titles;
+    QStringList mismatches;
     QStringList students;
+    std::vector<std::pair<std::string, std::string>> matchList;
+    QString className;
 
 private slots:
     //void on_resultListView_indexesMoved(const QModelIndexList &indexes);

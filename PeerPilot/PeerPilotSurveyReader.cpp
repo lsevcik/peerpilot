@@ -96,8 +96,9 @@ void ResponseList::addResponse(const Response& response) {
     responses.push_back(response);
 }
 
-std::vector<PeerReview> ResponseList::getPeerReviewsByPeerName(const std::string& peerName) const {
+std::vector<PeerReview> ResponseList::getPeerReviewsByPeerName(const std::string& peerNameInput) const {
     std::vector<PeerReview> matchingPeerReviews;
+    std::string peerName = reformatName(peerNameInput);
     for (const auto& response : responses) {
         for (const auto& peerReview : response.getPeerReviews()) {
             if (peerReview.getPeerName() == peerName) {
@@ -138,7 +139,8 @@ std::vector<std::string> ResponseList::getUnmatchedNames(const std::vector<std::
     return unmatchedNames;
 }
 
-void ResponseList::replaceName(const std::string& oldName, const std::string& newName) {
+void ResponseList::replaceName(const std::string& oldName, const std::string& newNameInput) {
+    std::string newName = reformatName(newNameInput);
     for (auto& resp : responses) {
         resp.replaceName(oldName, newName);
     }

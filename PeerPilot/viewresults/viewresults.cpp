@@ -102,6 +102,11 @@ int viewresults::on_importQuizPushButton_clicked() {
         }
         else{
             //open typodetect
+            auto widget = new typodetect(this, responses, titles, className, matchList);
+            widget->show();
+
+            //Hiding this screen's elements so it doesn't display underneath typodetect
+            ui->groupBox->hide();
         }
     }
 

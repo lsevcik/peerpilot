@@ -93,7 +93,7 @@ void viewquizresults::on_questionComboBox_currentIndexChanged(int index){
     }
     QString selectedStudent = ui->resultListView->selectionModel()->currentIndex().data().toString();
 
-    std::vector<PeerReview> peerReviews = responses.getPeerReviewsByPeerName(reformatName(selectedStudent.toStdString()));
+    std::vector<PeerReview> peerReviews = responses.getPeerReviewsByPeerName(selectedStudent.toStdString());
 
     std::string responseString = "";
 
@@ -135,7 +135,7 @@ void viewquizresults::on_markGradePushButton_clicked(){
 
     QString selectedStudent = ui->resultListView->selectionModel()->currentIndex().data().toString();
 
-    std::vector<PeerReview> peerReviews = responses.getPeerReviewsByPeerName(reformatName(selectedStudent.toStdString()));
+    std::vector<PeerReview> peerReviews = responses.getPeerReviewsByPeerName(selectedStudent.toStdString());
 
     // Force update
     on_questionComboBox_currentIndexChanged(ui->questionComboBox->currentIndex());
@@ -167,7 +167,7 @@ void viewquizresults::on_exportGradesPushButton_clicked(){
         fileContents += makeSafeForCSV(q.value(4).toString().toStdString()) + ",";
 
         //calculate grade
-        std::vector<PeerReview> reviews = responses.getPeerReviewsByPeerName(reformatName(q.value(0).toString().toStdString()));
+        std::vector<PeerReview> reviews = responses.getPeerReviewsByPeerName(q.value(0).toString().toStdString());
 
         std::vector<std::pair<int, int>> grade;
 
@@ -213,7 +213,7 @@ void viewquizresults::on_exportAllPushButton_clicked(){
                                                         | QFileDialog::DontResolveSymlinks);
 
     for(auto student : students){
-        std::vector<PeerReview> peerReviews = responses.getPeerReviewsByPeerName(reformatName(student.toStdString()));
+        std::vector<PeerReview> peerReviews = responses.getPeerReviewsByPeerName(student.toStdString());
 
         std::string fileContents = "";
 
@@ -236,4 +236,6 @@ void viewquizresults::on_exportAllPushButton_clicked(){
     }
 }
 
-
+void viewquizresults::on_backPushButton_clicked(){
+    this->close();
+}

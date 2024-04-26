@@ -30,6 +30,7 @@ private slots:
     void on_exportGradesPushButton_clicked();
     void on_exportAllPushButton_clicked();
     void on_markGradePushButton_clicked();
+    void on_backPushButton_clicked();
 
 private:
     Ui::viewquizresults *ui;
