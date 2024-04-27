@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>PeerPilot</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resources.qrc">
+    <normaloff>:/PeerPilotImageWithBG.png</normaloff>:/PeerPilotImageWithBG.png</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(42, 60, 72);
 background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(42, 60, 72, 255), stop:1 rgba(255, 255, 255,0));</string>

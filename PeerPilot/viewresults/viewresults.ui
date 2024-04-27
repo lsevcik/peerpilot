@@ -11,10 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>View Results</string>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(42, 60, 72);</string>
+  </property>
+  <property name="windowFilePath">
+   <string/>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">

@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>PeerPilotImage.png</file>
+        <file>PeerPilotImageWithBG.png</file>
     </qresource>
 </RCC>
