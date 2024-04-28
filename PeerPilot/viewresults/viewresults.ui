@@ -42,19 +42,6 @@ color: rgb(0, 0, 0);</string>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <spacer name="verticalSpacer_3">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
          <widget class="QPushButton" name="importQuizResultsPushButton">
           <property name="styleSheet">
            <string notr="true">border-top-color: rgb(0, 85, 255);
@@ -64,19 +51,6 @@ font: 12pt &quot;Calibri&quot;;</string>
           </property>
           <property name="text">
            <string>Import Quiz Results</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButton">
-          <property name="styleSheet">
-           <string notr="true">border-top-color: rgb(0, 85, 255);
-background-color: rgb(230, 112, 43);
-color: rgb(255, 255, 255);
-font: 12pt &quot;Calibri&quot;;</string>
-          </property>
-          <property name="text">
-           <string>Create Quiz</string>
           </property>
          </widget>
         </item>
@@ -92,19 +66,6 @@ font: 12pt &quot;Calibri&quot;;</string>
            </size>
           </property>
          </spacer>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButton_2">
-          <property name="styleSheet">
-           <string notr="true">border-top-color: rgb(0, 85, 255);
-background-color: rgb(230, 112, 43);
-color: rgb(255, 255, 255);
-font: 12pt &quot;Calibri&quot;;</string>
-          </property>
-          <property name="text">
-           <string>Delete Class</string>
-          </property>
-         </widget>
         </item>
         <item>
          <spacer name="verticalSpacer_2">
