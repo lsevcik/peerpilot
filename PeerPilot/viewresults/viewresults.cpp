@@ -82,13 +82,14 @@ int viewresults::on_importQuizPushButton_clicked() {
             matchList.push_back(std::make_pair(name, getBestMatchingString(students, name)));
         }
 
-        //Generate message
-        std::string message = "Unknown names found. The following are automatically generated matchups to known names in the class. Accept?";
+        // Generate message
+        std::string message = "<font color=\"white\">Unknown names found. The following are automatically generated matchups to known names in the class. Accept?</font>";
         for(auto& namePair : matchList){
-            message.append("\n" + namePair.first + " -> " + namePair.second);
+            message.append("<br><font color=\"white\">" + namePair.first + " -> " + namePair.second + "</font>");
         }
-
         QMessageBox::StandardButton reply = QMessageBox::question(this, "Mismatches found", QString::fromUtf8(message.c_str()), QMessageBox::Yes|QMessageBox::No);
+
+
 
         if(reply == QMessageBox::Yes){
             // Replace all the names
