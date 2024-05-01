@@ -49,6 +49,17 @@ int viewresults::on_importQuizPushButton_clicked() {
     // Convert QString to std::string
     std::string filePath = fileName.toStdString();
 
+    //Check file
+    // Read the first line of the file
+    QByteArray firstLine = file.readLine();
+    QString firstLineStr = QString::fromUtf8(firstLine).trimmed();
+    std::string firstLineStd = firstLineStr.toStdString();
+
+    // Check if the first line starts with the specified string
+    if (firstLineStd.find("name,id,sis_id,root_account,section,section_id,section_sis_id,submitted,attempt") != 0) {
+        return QMessageBox::warning(this, "PeerPilot", "Error opening file");
+    }
+
     // Get selected class
     QString className = ui->classListView->selectionModel()->currentIndex().data().toString();
 
