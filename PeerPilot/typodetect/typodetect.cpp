@@ -6,7 +6,7 @@
 
 
 typodetect::typodetect(QWidget *parent, ResponseList responsesInput, std::vector<std::string> titlesInput, QString classNameInput, std::vector<std::pair<std::string, std::string>> matchListInput)
-    : QWidget(parent)
+    : QDialog(parent)
     , ui(new Ui::typodetect)
 {
     ui->setupUi(this);

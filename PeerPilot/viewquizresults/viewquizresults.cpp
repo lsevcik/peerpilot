@@ -8,7 +8,7 @@
 #include <QMessageBox>
 #include <QInputDialog>
 viewquizresults::viewquizresults(QWidget *parent, ResponseList responsesInput, std::vector<std::string> titlesInput, QString classNameInput)
-    : QWidget(parent)
+    : QDialog(parent)
     , ui(new Ui::viewquizresults)
 {
     ui->setupUi(this);

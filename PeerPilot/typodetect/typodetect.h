@@ -1,7 +1,7 @@
 #ifndef TYPODETECT_H
 #define TYPODETECT_H
 
-#include <QWidget>
+#include <QDialog>
 #include "../PeerPilotSurveyReader.h"
 #include <QtSql>
 
@@ -9,7 +9,7 @@ namespace Ui {
 class typodetect;
 }
 
-class typodetect : public QWidget
+class typodetect : public QDialog
 {
     Q_OBJECT
 

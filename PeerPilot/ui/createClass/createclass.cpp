@@ -2,9 +2,10 @@
 #include "ui_createClass.h"
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QMenu>
 #include <QMetaType>
 
-createClass::createClass(QWidget* parent, QString className)
+createClass::createClass(QWidget* parent, QString className, bool create)
     : QDialog(parent)
     , ui(new Ui::createClass) {
     ui->setupUi(this);
@@ -18,6 +19,10 @@ createClass::createClass(QWidget* parent, QString className)
             qDebug() << q.lastError();
         classId = q.lastInsertId().toInt();
     } else {
+        if (!create) {
+            ui->groupBox->setTitle("Manage Class");
+            this->setWindowTitle("Manage Class");
+        }
         q.next();
         classId = q.value(0).toInt();
     }
@@ -28,12 +33,40 @@ createClass::createClass(QWidget* parent, QString className)
     studentListModel.select();
     studentListModel.setFilter(QString("class_id=") + QString::number(classId));
     ui->studentTableView->setModel(&studentListModel);
-    for (auto& i : {0, 2, 3, 4})
+    for (auto& i : {0, 2})
         ui->studentTableView->hideColumn(i);
+
+    ui->studentTableView->model()->setHeaderData(1, Qt::Horizontal, "Name");
+    ui->studentTableView->model()->setHeaderData(3, Qt::Horizontal, "SIS ID");
+    ui->studentTableView->model()->setHeaderData(4, Qt::Horizontal, "Canvas ID");
+    ui->studentTableView->model()->setHeaderData(5, Qt::Horizontal, "SIS Username");
+    ui->studentTableView->model()->setHeaderData(6, Qt::Horizontal, "Section");
+
+    auto importFileAction = new QAction(this);
+    importFileAction->setText("Import from CSV File");
+    connect(importFileAction, &QAction::triggered, this, &createClass::importFromFile);
+
+    auto importApiAction = new QAction(this);
+    importApiAction->setText("Import from Canvas API");
+    connect(importApiAction, &QAction::triggered, this, &createClass::importFromAPI);
+
+    auto menu = new QMenu(this);
+    menu->addActions({ importFileAction, importApiAction });
+    
+    ui->importPushButton->setMenu(menu);
 }
 
 createClass::~createClass() {
+    q.prepare(QString("UPDATE classes SET title=? WHERE id=") + QString::number(classId));
+    q.addBindValue(ui->classNameLineEdit->text());
+    q.exec();
     delete ui;
+}
+
+void createClass::closeEvent(QCloseEvent* e) {
+    q.prepare(QString("UPDATE classes SET title=? WHERE id=") + QString::number(classId));
+    q.addBindValue(ui->classNameLineEdit->text());
+    q.exec();
 }
 
 void createClass::on_manualEntryNamePushButton_clicked() {
@@ -50,13 +83,10 @@ void createClass::on_manualEntryNamePushButton_clicked() {
 }
 
 void createClass::on_savePushButton_clicked() {
-    q.prepare(QString("UPDATE classes SET title=? WHERE id=") + QString::number(classId));
-    q.addBindValue(ui->classNameLineEdit->text());
-    q.exec();
     this->close();
 }
 
-int createClass::on_importPushButton_clicked() {
+int createClass::importFromFile() {
     QFileDialog dialog(this);
     auto fileName = QFileDialog::getOpenFileName(this,
         tr("Open Roster"), QDir::homePath(), tr("Spreadsheets (*.xls *.xlsx *.csv)"));
@@ -109,5 +139,9 @@ int createClass::on_importPushButton_clicked() {
         studentRecord.append(sectionField);
         studentListModel.insertRecord(-1, studentRecord);
     }
+    return 0;
+}
+
+int createClass::importFromAPI() {
     return 0;
 }

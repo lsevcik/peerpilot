@@ -2,6 +2,7 @@
 #include "ui_manageClasses.h"
 #include "../createClass/createClass.h"
 #include <QInputDialog>
+#include <QMessageBox>
 
 manageClasses::manageClasses(QWidget *parent)
     : QDialog(parent)
@@ -22,7 +23,7 @@ manageClasses::~manageClasses()
 
 void manageClasses::on_createButton_clicked() {
     bool ok;
-    QString className = QInputDialog::getText(this, "Class Name?", "Class Name:", QLineEdit::Normal, "", &ok);
+    QString className = QInputDialog::getText(this, "Create New Class", "Class Name:", QLineEdit::Normal, "", &ok);
     if (!ok)
         return;
 
@@ -31,12 +32,24 @@ void manageClasses::on_createButton_clicked() {
     auto classRecord = QSqlRecord();
     classRecord.append(nameField);
     classListModel.insertRecord(-1, classRecord);
-    auto dialog = new createClass(this, className);
+    auto dialog = new createClass(this, className, true);
     dialog->exec();
+    classListModel.select();
 }
 
 void manageClasses::on_updateButton_clicked() {
     QString className = ui->classListView->selectionModel()->currentIndex().data().toString();
     auto dialog = new createClass(this, className);
     dialog->exec();
+    classListModel.select();
+}
+
+void manageClasses::on_deleteButton_clicked() {
+    auto index = ui->classListView->selectionModel()->currentIndex();
+    int row = index.row();
+    QString className = index.data().toString();
+    if (QMessageBox::question(this, "Delete Class", QString("Are you sure you want to delete ") + className, QMessageBox::Ok | QMessageBox::Cancel) != QMessageBox::Ok)
+        return;
+    classListModel.removeRow(row);
+    classListModel.select();
 }

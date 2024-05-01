@@ -1,7 +1,7 @@
 #ifndef VIEWQUIZRESULTS_H
 #define VIEWQUIZRESULTS_H
 
-#include <QWidget>
+#include <QDialog>
 #include "../PeerPilotSurveyReader.h"
 #include <QtSql>
 
@@ -9,7 +9,7 @@ namespace Ui {
 class viewquizresults;
 }
 
-class viewquizresults : public QWidget
+class viewquizresults : public QDialog
 {
     Q_OBJECT
 

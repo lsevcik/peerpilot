@@ -13,13 +13,16 @@ class createClass : public QDialog
     Q_OBJECT
 
 public:
-    explicit createClass(QWidget *parent = nullptr, QString className = "");
+    explicit createClass(QWidget *parent = nullptr, QString className = "", bool create = false);
     ~createClass();
+
+    void closeEvent(QCloseEvent* e) override;
 
 private slots:
     void on_manualEntryNamePushButton_clicked();
     void on_savePushButton_clicked();
-    int on_importPushButton_clicked();
+    int importFromFile();
+    int importFromAPI();
 
 private:
     Ui::createClass *ui;

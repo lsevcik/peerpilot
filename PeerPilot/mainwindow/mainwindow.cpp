@@ -26,9 +26,8 @@ void MainWindow::on_actionManage_Classes_triggered() {
     dialog->exec();
 }
 
-void MainWindow::on_actionAbout_triggered()
-{
-    QMessageBox::about(this, "About", "\u00a9 PeerPilot 2024 Some Rights Reserved");
+void MainWindow::on_actionAbout_triggered() {
+    QMessageBox::about(this, "About PeerPilot", "\u00a9 PeerPilot 2024 Some Rights Reserved");
 }
 
 

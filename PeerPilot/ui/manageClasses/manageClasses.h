@@ -19,6 +19,7 @@ public:
 private slots:
     void on_createButton_clicked();
     void on_updateButton_clicked();
+    void on_deleteButton_clicked();
 
 private:
     Ui::manageClasses *ui;
