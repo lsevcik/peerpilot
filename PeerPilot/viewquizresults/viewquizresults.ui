@@ -75,10 +75,16 @@ color: rgb(0, 0, 0);</string>
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="2">
            <widget class="QLineEdit" name="gradeLineEdit">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="styleSheet">
              <string notr="true">font: 12pt &quot;Calibri&quot;;
 background-color: rgb(255, 255, 255);
 color: rgb(0, 0, 0);</string>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
