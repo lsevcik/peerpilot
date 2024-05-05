@@ -125,6 +125,10 @@ void viewquizresults::on_questionComboBox_currentIndexChanged(int index){
 
 void viewquizresults::on_markGradePushButton_clicked(){
 
+    if(ui->gradeLineEdit->text() != ""){
+        return;
+    }
+
     int grade = QInputDialog::getInt(this,"Mark question as graded?","Enter the maximum possible score for this question:\n" + ui->questionComboBox->currentText());
 
     gradedQuestions.push_back(std::make_pair(ui->questionComboBox->currentIndex(), grade));
@@ -152,6 +156,8 @@ void viewquizresults::on_exportGradesPushButton_clicked(){
 
     std::string fileContents = "Student, ID, SIS User ID, SIS Login ID, Section, " + assignmentName.toStdString() + "\n";
 
+    fileContents += "Points Possible,,,,," + std::to_string(maxPoints) + "\n";
+
     //GET ALL STUDENT DATA, TABULATE GRADES FROM ALL GRADED QUESTIONS
     // Get data from database
     q.prepare("SELECT students.name, students.canvas_id, students.sis_id, students.sis_username, students.section FROM students JOIN classes ON students.class_id = classes.id WHERE title=?");
@@ -171,24 +177,29 @@ void viewquizresults::on_exportGradesPushButton_clicked(){
 
         std::vector<std::pair<int, int>> grade;
 
+
+        double points = 0.0;
+        double possible = 0.0;
+
         for(auto& gradedQuestion : gradedQuestions){
             int pointTotal = 0;
             for(auto& review : reviews){
                 std::string points = std::regex_replace(review.getAnswers()[gradedQuestion.first], std::regex(R"([\D])"), "");
                 pointTotal += std::stoi(points);
             }
-            grade.push_back(std::make_pair(pointTotal/reviews.size(),gradedQuestion.second));
+            //grade.push_back(std::make_pair(pointTotal/reviews.size(),gradedQuestion.second));
+            points += pointTotal/reviews.size();
+            possible += gradedQuestion.second;
         }
 
-        double totalScore = 0.0;
-
+/*
         for (const auto& pair : grade) {
-            double points = pair.first;
-            double weight = pair.second;
-            double score = (points / weight) * maxPoints; // Calculate the score for this item
-            totalScore += score; // Add to the total score
+            points += pair.first;
+            possible += pair.second;
         }
+*/
 
+        double totalScore = (points / possible) * maxPoints;
         fileContents += std::to_string(totalScore) + "\n";
     }
 

@@ -46,6 +46,7 @@ public:
     std::vector<PeerReview> getPeerReviews() const;
     void print() const;
     void replaceName(const std::string& oldName, const std::string& newName);
+    std::vector<std::string> getQuestionTitles(std::string filePath);
 };
 
 class ResponseList {
