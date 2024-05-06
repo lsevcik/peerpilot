@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QtSql>
+#include <QNetworkReply>
 
 namespace Ui {
 class createClass;
@@ -25,10 +26,12 @@ private slots:
     int importFromAPI();
 
 private:
+    int chooseClassForAPI(QNetworkReply*);
     Ui::createClass *ui;
     QSqlQuery q;
     QSqlTableModel studentListModel;
     int classId;
+    QNetworkAccessManager netMan = QNetworkAccessManager(this);
 };
 
 #endif // CREATECLASS_H

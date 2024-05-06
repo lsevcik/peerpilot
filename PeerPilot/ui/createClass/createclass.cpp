@@ -4,6 +4,11 @@
 #include <QMessageBox>
 #include <QMenu>
 #include <QMetaType>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QJsonDocument>
+#include <QDebug>
+#include <iostream>
 
 createClass::createClass(QWidget* parent, QString className, bool create)
     : QDialog(parent)
@@ -142,6 +147,33 @@ int createClass::importFromFile() {
     return 0;
 }
 
+
+int createClass::chooseClassForAPI(QNetworkReply* reply) {
+    if (reply->error() != QNetworkReply::NoError)
+        return QMessageBox::critical(this, "PeerPilot", "Error getting class list from API");
+
+    auto classJsonDoc = QJsonDocument::fromJson(reply->readAll());
+    if (classJsonDoc.isNull())
+        return QMessageBox::critical(this, "PeerPilot", "Error getting class list from API");
+
+    auto classJsonObj = classJsonDoc.object();
+    auto data = classJsonObj["data"].toObject();
+    qDebug() << data;
+    auto allCourses = data["allCourses"].toObject();
+    qDebug() << allCourses;
+    for (auto c : allCourses)
+        qDebug() << c;
+}
+
 int createClass::importFromAPI() {
+    auto canvasUrl = "https://canvas.instructure.com/api/graphql";
+    auto canvasAuthToken = "7~gVXNWfNOe3bwfJBjilJSo2h7BC4Zw1yccq8P6PLRwT4cFeso8kKnWFLQ2JX9rnK7";
+    auto canvasQUrl = QUrl(canvasUrl);
+    auto canvasRequest = QNetworkRequest(canvasQUrl);
+    auto requestBody = QUrlQuery();
+    canvasRequest.setRawHeader("Authorization", QString("Bearer ").append(canvasAuthToken).toLocal8Bit());
+    requestBody.addQueryItem("query", "{ allCourses { id, sisId, name } }");
+    connect(&netMan, &QNetworkAccessManager::finished, this, &createClass::chooseClassForAPI);
+    auto res = netMan.post(canvasRequest, requestBody.toString().toLocal8Bit());
     return 0;
 }
