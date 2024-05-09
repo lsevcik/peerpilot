@@ -15,7 +15,6 @@ viewquizresults::viewquizresults(QWidget *parent, ResponseList responsesInput, s
     connect(ui->resultListView, &QListView::clicked, this, &viewquizresults::on_resultListView_clicked);
     connect(ui->questionComboBox, &QComboBox::currentIndexChanged, this, &viewquizresults::on_questionComboBox_currentIndexChanged);
 
-    //QMessageBox::information(this, "PeerPilot", className);
     // Call the getData function with the file path
     responses = responsesInput;
 
@@ -45,33 +44,6 @@ viewquizresults::viewquizresults(QWidget *parent, ResponseList responsesInput, s
 
     // Set the model to the resultListView
     ui->resultListView->setModel(model);
-
-
-    /*
-    for (const auto& response : responses.getResponses()) {
-        // Generate string representation of each response
-        std::string responseString = "Response Name: " + response.getName() + "\n";
-        responseString += "Response ID: " + std::to_string(response.getId()) + "\n";
-
-        // Iterate over peer reviews for this response
-        for (const auto& peerReview : response.getPeerReviews()) {
-            responseString += "- Peer Name: " + peerReview.getPeerName() + "\n";
-            responseString += "  Origin ID: " + std::to_string(peerReview.getOriginId()) + "\n";
-
-            // Iterate over answers for this peer review
-            for (const auto& answer : peerReview.getAnswers()) {
-                responseString += "  - " + answer + "\n";
-            }
-        }
-
-
-
-        // Append the response string to the QTextEdit widget
-        ui->answerTextEdit->append(QString::fromStdString(responseString));
-    }
-    ui->answerTextEdit->append(QString::fromStdString("test"));
-*/
-
 }
 
 viewquizresults::~viewquizresults()
@@ -138,7 +110,9 @@ void viewquizresults::on_markGradePushButton_clicked(){
         return;
     }
     bool ok = false;
-    int grade = QInputDialog::getInt(this,"Mark question as graded?","Enter the maximum possible score for this question:\n" + ui->questionComboBox->currentText(), NULL,0,MAXINT,1, &ok);
+    int grade = QInputDialog::getInt(this,"Mark question as graded?",
+                                     "Enter the maximum possible score for this question:\n" + ui->questionComboBox->currentText(),
+                                     NULL,0,MAXINT,1, &ok);
 
     if(!ok){
         return;
@@ -164,13 +138,19 @@ void viewquizresults::on_exportGradesPushButton_clicked(){
     }
     bool ok = false;
 
-    QString assignmentName = QInputDialog::getText(this,"Exporting gradesheet","Enter the name for this assignment.\nIf you have an existing assignment on canvas, please enter it along with the ID in the following format:\nAssignment Name(ID)", QLineEdit::Normal, NULL, &ok);
+    QString assignmentName = QInputDialog::getText(this,"Exporting gradesheet",
+                                                   "Enter the name for this assignment.\n"
+                                                   "If you have an existing assignment on canvas, please enter it along with the ID in the following format:\n"
+                                                   "Assignment Name(ID)",
+                                                   QLineEdit::Normal, NULL, &ok);
 
     if(!ok){
         return;
     }
 
-    int maxPoints = QInputDialog::getInt(this,"Exporting gradesheet","Enter the maximum points possible for this assignment:\n", NULL,0,MAXINT,1, &ok);
+    int maxPoints = QInputDialog::getInt(this,"Exporting gradesheet",
+                                         "Enter the maximum points possible for this assignment:\n",
+                                         NULL,0,MAXINT,1, &ok);
 
     if(!ok){
         return;
@@ -182,12 +162,14 @@ void viewquizresults::on_exportGradesPushButton_clicked(){
 
     //GET ALL STUDENT DATA, TABULATE GRADES FROM ALL GRADED QUESTIONS
     // Get data from database
-    q.prepare("SELECT students.name, students.canvas_id, students.sis_id, students.sis_username, students.section FROM students JOIN classes ON students.class_id = classes.id WHERE title=?");
+    q.prepare("SELECT students.name, students.canvas_id, students.sis_id, students.sis_username, students.section "
+              "FROM students "
+              "JOIN classes ON students.class_id = classes.id "
+              "WHERE title=?");
     q.addBindValue(className);
     q.exec();
 
     while (q.next()) {
-        //students << q.value(0).toString();
         fileContents += makeSafeForCSV(q.value(0).toString().toStdString()) + ",";
         fileContents += makeSafeForCSV(q.value(1).toString().toStdString()) + ",";
         fileContents += makeSafeForCSV(q.value(2).toString().toStdString()) + ",";
@@ -254,6 +236,10 @@ void viewquizresults::on_exportAllPushButton_clicked(){
         std::vector<PeerReview> peerReviews = responses.getPeerReviewsByPeerName(student.toStdString());
 
         std::string fileContents = "";
+
+        if(peerReviews.empty()){
+            continue;
+        }
 
         for (int i = 0; i < peerReviews[0].getAnswers().size(); i++)
         {
