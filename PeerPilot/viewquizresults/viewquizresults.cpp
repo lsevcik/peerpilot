@@ -102,7 +102,7 @@ void viewquizresults::on_questionComboBox_currentIndexChanged(int index){
         return;
     }
     for (auto& review : peerReviews) {
-        responseString += review.getAnswers()[index] + "\n\n";
+        responseString += review.getAnswers()[index] + "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
     }
     ui->answerTextEdit->clear();
     ui->answerTextEdit->append(QString::fromStdString(responseString));
@@ -111,10 +111,19 @@ void viewquizresults::on_questionComboBox_currentIndexChanged(int index){
     for(auto& question : gradedQuestions){
         if(question.first == ui->questionComboBox->currentIndex()){
             int grade = 0;
+            bool gradeableAnswerFound = false;
             for(auto& review : peerReviews){
                 // Replace all non numeric characters
                 std::string points = std::regex_replace(review.getAnswers()[index], std::regex(R"([\D])"), "");
+                if(points == ""){
+                    // Escape if there's nothing to grade
+                    continue;
+                }
                 grade += std::stoi(points);
+                gradeableAnswerFound = true;
+            }
+            if(!gradeableAnswerFound){
+                continue;
             }
             grade /= peerReviews.size();
             ui->gradeLineEdit->insert(QString::number(grade) + "/" + QString::number(question.second));
@@ -128,8 +137,12 @@ void viewquizresults::on_markGradePushButton_clicked(){
     if(ui->gradeLineEdit->text() != ""){
         return;
     }
+    bool ok = false;
+    int grade = QInputDialog::getInt(this,"Mark question as graded?","Enter the maximum possible score for this question:\n" + ui->questionComboBox->currentText(), NULL,0,MAXINT,1, &ok);
 
-    int grade = QInputDialog::getInt(this,"Mark question as graded?","Enter the maximum possible score for this question:\n" + ui->questionComboBox->currentText());
+    if(!ok){
+        return;
+    }
 
     gradedQuestions.push_back(std::make_pair(ui->questionComboBox->currentIndex(), grade));
 
@@ -149,10 +162,19 @@ void viewquizresults::on_exportGradesPushButton_clicked(){
     if(!ui->resultListView->currentIndex().isValid()){
         return;
     }
+    bool ok = false;
 
-    QString assignmentName = QInputDialog::getText(this,"Exporting gradesheet","Enter the name for this assignment.\nIf you have an existing assignment on canvas, please enter it along with the ID in the following format:\nAssignment Name(ID)");
+    QString assignmentName = QInputDialog::getText(this,"Exporting gradesheet","Enter the name for this assignment.\nIf you have an existing assignment on canvas, please enter it along with the ID in the following format:\nAssignment Name(ID)", QLineEdit::Normal, NULL, &ok);
 
-    int maxPoints = QInputDialog::getInt(this,"Exporting gradesheet","Enter the maximum points possible for this assignment:\n");
+    if(!ok){
+        return;
+    }
+
+    int maxPoints = QInputDialog::getInt(this,"Exporting gradesheet","Enter the maximum points possible for this assignment:\n", NULL,0,MAXINT,1, &ok);
+
+    if(!ok){
+        return;
+    }
 
     std::string fileContents = "Student, ID, SIS User ID, SIS Login ID, Section, " + assignmentName.toStdString() + "\n";
 
@@ -183,23 +205,28 @@ void viewquizresults::on_exportGradesPushButton_clicked(){
 
         for(auto& gradedQuestion : gradedQuestions){
             int pointTotal = 0;
+            bool gradeableAnswerFound = false;
             for(auto& review : reviews){
                 std::string points = std::regex_replace(review.getAnswers()[gradedQuestion.first], std::regex(R"([\D])"), "");
+                if(points == ""){
+                    // Escape if there's nothing to grade
+                    continue;
+                }
                 pointTotal += std::stoi(points);
+                gradeableAnswerFound = true;
             }
-            //grade.push_back(std::make_pair(pointTotal/reviews.size(),gradedQuestion.second));
+            if(!gradeableAnswerFound){
+                continue;
+            }
             points += pointTotal/reviews.size();
             possible += gradedQuestion.second;
         }
 
-/*
-        for (const auto& pair : grade) {
-            points += pair.first;
-            possible += pair.second;
+        double totalScore = 0;
+        if(possible != 0.0){
+            //Only add grade if something gradeable was found in all graded questions
+            totalScore = (points / possible) * maxPoints;
         }
-*/
-
-        double totalScore = (points / possible) * maxPoints;
         fileContents += std::to_string(totalScore) + "\n";
     }
 

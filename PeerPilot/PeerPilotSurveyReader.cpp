@@ -153,43 +153,18 @@ bool is_number(const std::string& s) {
 }
 
 std::vector<std::vector<std::string>> parseCSV(const std::string& filename) {
+csv:csv::CSVReader reader(filename);
+
     std::ifstream file(filename);
     std::vector<std::vector<std::string>> data;
 
-    if (!file.is_open()) {
-        std::cerr << "Failed to open the file: " << filename << std::endl;
-        return data;
-    }
-
-    std::string line;
-    while (std::getline(file, line)) {
+    for (csv::CSVRow& rowCSV: reader) { // Input iterator
+        if(data.empty()){
+            data.push_back(rowCSV.get_col_names());
+        }
         std::vector<std::string> row;
-        std::stringstream ss(line);
-        std::string cell;
-        bool inQuotes = false;
-        while (std::getline(ss, cell, ',')) {
-            if (cell.empty()) {  // Handle empty cells
-                row.push_back("");
-                continue;
-            }
-
-            // Check if the cell starts with a quote
-            if (cell.front() == '\"' && !inQuotes) {
-                inQuotes = true;
-                cell.erase(0, 1);  // Remove the opening quote
-            }
-
-            // Check if the cell ends with a quote
-            if (cell.back() == '\"' && inQuotes) {
-                inQuotes = false;
-                cell.pop_back();  // Remove the closing quote
-            }
-
-            // Trim leading and trailing whitespace from cell
-            cell.erase(0, cell.find_first_not_of(" \t\r\n"));
-            cell.erase(cell.find_last_not_of(" \t\r\n") + 1);
-
-            row.push_back(cell);
+        for (csv::CSVField& fieldCSV: rowCSV) {
+            row.push_back(fieldCSV.get<>());
         }
         data.push_back(row);
     }
@@ -242,7 +217,7 @@ ResponseList getData(std::string filePath) {
         bool firstPeerFound = false;
 
         for (int j = 0; j < uniqueData[i].size(); j++) {
-            if ((data[0][j]).find("Peer Name") != std::string::npos) {
+            if (toLowercase(data[0][j]).find("peer name") != std::string::npos) {
                 if (firstPeerFound) {
                     response->addPeerReview(*peerReview);
                 }
@@ -253,7 +228,10 @@ ResponseList getData(std::string filePath) {
                 continue;
             }
             else if (data[0][j].find("n correct") != std::string::npos) {
-                response->addPeerReview(*peerReview);
+                if(firstPeerFound){
+                    response->addPeerReview(*peerReview);
+                }
+
             }
             else if (firstPeerFound) {
                 peerReview->addAnswer(uniqueData[i][j]);
@@ -276,7 +254,7 @@ std::vector<std::string> getQuestionTitles(std::string filePath) {
 
     bool firstPeerFound = false;
     for (int j = 0; j < data[0].size(); j++) {
-        if (data[0][j].find("Peer Name") != std::string::npos) {
+        if (toLowercase(data[0][j]).find("peer name") != std::string::npos) {
             if (firstPeerFound) {
                 break;
             }
