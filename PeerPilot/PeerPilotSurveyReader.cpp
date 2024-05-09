@@ -147,9 +147,10 @@ void ResponseList::replaceName(const std::string& oldName, const std::string& ne
 }
 
 bool is_number(const std::string& s) {
-    std::string::const_iterator it = s.begin();
-    while (it != s.end() && std::isdigit(*it)) ++it;
-    return !s.empty() && it == s.end();
+    std::istringstream iss(s);
+    double testValue;
+    iss >> std::noskipws >> testValue; // Try to read a number
+    return iss.eof() && !iss.fail();   // Check if successful
 }
 
 std::vector<std::vector<std::string>> parseCSV(const std::string& filename) {
