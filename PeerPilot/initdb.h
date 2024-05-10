@@ -3,7 +3,7 @@
 
 const auto CLASSES_SQL = QString(R"(
     CREATE TABLE classes(
-        id INTEGER PRIMARY KEY,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         title VARCHAR UNIQUE NOT NULL,
         canvas_id INTEGER
     )
@@ -11,7 +11,7 @@ const auto CLASSES_SQL = QString(R"(
 
 const auto STUDENTS_SQL = QString(R"(
     create table students(
-        id INTEGER PRIMARY KEY,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         name VARCHAR NOT NULL,
         class_id INTEGER REFERENCES classes(id) NOT NULL,
         canvas_id INTEGER,
