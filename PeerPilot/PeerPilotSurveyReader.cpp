@@ -229,7 +229,7 @@ ResponseList getData(std::string filePath) {
                 continue;
             }
             else if (data[0][j].find("n correct") != std::string::npos) {
-                if(firstPeerFound){
+                if(firstPeerFound && peerReview->getPeerName() != ""){
                     response->addPeerReview(*peerReview);
                 }
 
