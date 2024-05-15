@@ -152,7 +152,7 @@ void viewquizresults::on_exportGradesPushButton_clicked(){
 
     int maxPoints = QInputDialog::getInt(this,"Exporting gradesheet",
                                          "Enter the maximum points possible for this assignment:\n",
-                                         0,0,std::numeric_limits<long>::max()std::numeric_limits<long>::max(), 1, &ok);
+                                         0,0,std::numeric_limits<long>::max(), 1, &ok);
 
     if(!ok){
         return;
