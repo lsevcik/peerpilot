@@ -7,6 +7,8 @@
 #include <QtSql>
 #include <QMessageBox>
 #include <QInputDialog>
+#include <limits>
+
 viewquizresults::viewquizresults(QWidget *parent, ResponseList responsesInput, std::vector<std::string> titlesInput, QString classNameInput)
     : QDialog(parent)
     , ui(new Ui::viewquizresults)
@@ -112,7 +114,7 @@ void viewquizresults::on_markGradePushButton_clicked(){
     bool ok = false;
     int grade = QInputDialog::getInt(this,"Mark question as graded?",
                                      "Enter the maximum possible score for this question:\n" + ui->questionComboBox->currentText(),
-                                     NULL,0,MAXINT,1, &ok);
+                                     0,0, std::numeric_limits<long>::max(),1, &ok);
 
     if(!ok){
         return;
@@ -150,7 +152,7 @@ void viewquizresults::on_exportGradesPushButton_clicked(){
 
     int maxPoints = QInputDialog::getInt(this,"Exporting gradesheet",
                                          "Enter the maximum points possible for this assignment:\n",
-                                         NULL,0,MAXINT,1, &ok);
+                                         0,0,std::numeric_limits<long>::max()std::numeric_limits<long>::max(), 1, &ok);
 
     if(!ok){
         return;
